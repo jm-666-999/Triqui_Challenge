@@ -166,6 +166,45 @@
       font-size: 20px;
       margin: 2px 0 0;
     }
+    .difficulty-text {
+      text-align: center;
+      font-size: 16px;
+      margin: 6px 0 0;
+      color: #1738b6;
+      font-weight: 700;
+    }
+    .difficulty-selector {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+    }
+    .difficulty-selector-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #204099;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+    .difficulty-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .difficulty-btn {
+      border: 1px solid #2a2a2a;
+      background: #e9fff5;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 7px 12px;
+      cursor: pointer;
+      min-width: 88px;
+    }
+    .difficulty-btn.selected {
+      border: 2px solid #1738b6;
+      background: #d7fffb;
+    }
     #status {
       text-align: center;
       font-size: clamp(22px, 6vw, 30px);
@@ -249,6 +288,18 @@
       text-transform: uppercase;
       margin-bottom: 6px;
     }
+    .question-difficulty {
+      font-weight: 700;
+      color: #1738b6;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .question-timer {
+      font-weight: 700;
+      color: #b01818;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
     #questionText {
       margin: 0 0 10px;
       font-size: 21px;
@@ -286,10 +337,26 @@
       max-width: 300px;
       border: 2px solid #111;
       text-align: center;
-      font-size: 32px;
       font-weight: 700;
-      padding: 24px 12px;
+      padding: 20px 12px;
       color: #132;
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+    }
+    .answer-result {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+    .feedback-continue-btn {
+      border: 1px solid #1b7f2e;
+      background: var(--accent);
+      font-size: 18px;
+      font-weight: 600;
+      padding: 8px 18px;
+      cursor: pointer;
+      border-radius: 8px;
     }
     .answer-card.correct {
       background: #98ff95;
@@ -378,6 +445,15 @@
       </div>
       <div class="panel">
         <p class="category-text">Categorías seleccionadas: <strong id="selectedCategoryLabel">Historia</strong></p>
+        <div class="difficulty-selector" aria-label="Selector de dificultad">
+          <span class="difficulty-selector-label">Dificultad</span>
+          <div class="difficulty-options">
+            <button class="difficulty-btn selected" data-difficulty="medio" type="button">Medio</button>
+            <button class="difficulty-btn" data-difficulty="dificil" type="button">Difícil</button>
+            <button class="difficulty-btn" data-difficulty="experto" type="button">Experto</button>
+          </div>
+        </div>
+        <p id="difficultyLabel" class="difficulty-text">Nivel seleccionado: Medio</p>
       </div>
 
       <h2 id="status">Pulsa para Empezar</h2>
@@ -406,12 +482,17 @@
     <div id="questionOverlay" class="question-overlay" aria-live="polite">
       <div class="question-card">
         <div id="questionCategory" class="question-category">Categoría: Historia</div>
+        <div id="questionDifficulty" class="question-difficulty">Nivel: Medio</div>
+        <div id="questionTimer" class="question-timer">Tiempo: 15s</div>
         <p id="questionText"></p>
         <div id="optionsContainer" class="options-container"></div>
       </div>
     </div>
     <div id="answerFeedback" class="answer-feedback" aria-live="polite">
-      <div id="answerCard" class="answer-card">¡Correcto!</div>
+      <div id="answerCard" class="answer-card">
+        <p id="answerText" class="answer-result">¡Correcto!</p>
+        <button id="answerContinueBtn" class="feedback-continue-btn" type="button">Continuar</button>
+      </div>
     </div>
   </main>
 
@@ -420,6 +501,7 @@
     const gameScreen = document.getElementById("gameScreen");
     const continueBtn = document.getElementById("continueBtn");
     const categoryButtons = Array.from(document.querySelectorAll(".cat-btn"));
+    const difficultyButtons = Array.from(document.querySelectorAll(".difficulty-btn"));
 
     const player1Input = document.getElementById("player1");
     const player2Input = document.getElementById("player2");
@@ -428,6 +510,7 @@
     const scoreXEl = document.getElementById("scoreX");
     const scoreOEl = document.getElementById("scoreO");
     const selectedCategoryLabel = document.getElementById("selectedCategoryLabel");
+    const difficultyLabel = document.getElementById("difficultyLabel");
     const statusEl = document.getElementById("status");
 
     const startBtn = document.getElementById("startBtn");
@@ -437,10 +520,14 @@
 
     const questionOverlay = document.getElementById("questionOverlay");
     const questionCategoryEl = document.getElementById("questionCategory");
+    const questionDifficultyEl = document.getElementById("questionDifficulty");
+    const questionTimerEl = document.getElementById("questionTimer");
     const questionTextEl = document.getElementById("questionText");
     const optionsContainer = document.getElementById("optionsContainer");
     const answerFeedback = document.getElementById("answerFeedback");
     const answerCard = document.getElementById("answerCard");
+    const answerText = document.getElementById("answerText");
+    const answerContinueBtn = document.getElementById("answerContinueBtn");
 
     const patterns = [
       [0, 1, 2],
@@ -461,519 +548,224 @@
       entretenimiento: "Entretenimiento",
       random: "Random"
     };
+    const difficultyLabels = {
+      medio: "Medio",
+      dificil: "Difícil",
+      experto: "Experto"
+    };
 
     const baseCategories = ["historia", "deportes", "ciencias", "geografia", "entretenimiento"];
 
     const questionBank = {
       historia: [
-        {
-          text: "¿En qué año llegó Cristóbal Colón a América?",
-          options: ["1492", "1521", "1453", "1810"],
-          answer: 0
-        },
-        {
-          text: "¿Quién fue el primer presidente de Estados Unidos?",
-          options: ["Abraham Lincoln", "George Washington", "Thomas Jefferson", "John Adams"],
-          answer: 1
-        },
-        {
-          text: "¿Qué civilización construyó Machu Picchu?",
-          options: ["Maya", "Azteca", "Inca", "Romana"],
-          answer: 2
-        },
-        {
-          text: "¿En qué país comenzó la Revolución Francesa?",
-          options: ["Francia", "Inglaterra", "Alemania", "Italia"],
-          answer: 0
-        },
-        {
-          text: "¿Qué muro cayó en 1989 y marcó un cambio en Europa?",
-          options: ["Muro de Adriano", "Muro de los Lamentos", "Muro de Berlín", "Gran Muralla China"],
-          answer: 2
-        },
-        {
-          text: "¿Quién lideró la independencia de la India con la no violencia?",
-          options: ["Nelson Mandela", "Mahatma Gandhi", "Simón Bolívar", "Winston Churchill"],
-          answer: 1
-        },
-        {
-          text: "¿Qué imperio construyó el Coliseo de Roma?",
-          options: ["Griego", "Romano", "Otomano", "Persa"],
-          answer: 1
-        },
-        {
-          text: "¿Qué conflicto ocurrió entre 1914 y 1918?",
-          options: ["Segunda Guerra Mundial", "Guerra Fría", "Primera Guerra Mundial", "Guerra de Crimea"],
-          answer: 2
-        },
-        {
-          text: "¿Quién fue conocido como el Libertador en Sudamérica?",
-          options: ["José de San Martín", "Simón Bolívar", "Antonio José de Sucre", "Bernardo O'Higgins"],
-          answer: 1
-        },
-        {
-          text: "¿En qué país se originaron los Juegos Olímpicos antiguos?",
-          options: ["Italia", "Turquía", "Grecia", "Egipto"],
-          answer: 2
-        },
-        {
-          text: "¿Quién redactó gran parte de la Declaración de Independencia de EE.UU.?",
-          options: ["George Washington", "Thomas Jefferson", "Benjamin Franklin", "James Madison"],
-          answer: 1
-        },
-        {
-          text: "¿En qué año cayó el Imperio romano de Occidente?",
-          options: ["330", "410", "476", "622"],
-          answer: 2
-        },
-        {
-          text: "¿Qué faraón está asociado con la Gran Pirámide de Guiza?",
-          options: ["Ramsés II", "Tutankamón", "Akenatón", "Keops"],
-          answer: 3
-        },
-        {
-          text: "¿Qué ciudad fue sepultada por la erupción del Vesubio en el 79 d.C.?",
-          options: ["Atenas", "Pompeya", "Cartago", "Troya"],
-          answer: 1
-        },
-        {
-          text: "¿Qué tratado puso fin oficialmente a la Primera Guerra Mundial?",
-          options: ["Tratado de Tordesillas", "Tratado de París", "Tratado de Versalles", "Tratado de Utrecht"],
-          answer: 2
-        },
-        {
-          text: "¿Qué reina egipcia tuvo alianzas con Julio César y Marco Antonio?",
-          options: ["Nefertiti", "Cleopatra", "Hatshepsut", "Sobekneferu"],
-          answer: 1
-        },
-        {
-          text: "¿Qué civilización mesoamericana destacó por su calendario astronómico?",
-          options: ["Maya", "Inca", "Olmeca", "Fenicia"],
-          answer: 0
-        },
-        {
-          text: "¿En qué país comenzó la Revolución Industrial?",
-          options: ["Francia", "Alemania", "Reino Unido", "Estados Unidos"],
-          answer: 2
-        },
-        {
-          text: "¿Qué expedición completó la primera vuelta al mundo?",
-          options: ["Cook", "Magallanes-Elcano", "Colón", "Vasco da Gama"],
-          answer: 1
-        },
-        {
-          text: "¿En qué año cayó Tenochtitlán?",
-          options: ["1492", "1519", "1521", "1533"],
-          answer: 2
-        }
+        { text: "¿Qué tratado (1648) suele considerarse el origen del sistema moderno de Estados soberanos?", options: ["Tratado de Utrecht", "Paz de Westfalia", "Congreso de Viena", "Tratado de Tordesillas"], answer: 1 },
+        { text: "¿Qué emperador bizantino ordenó la compilación del Corpus Iuris Civilis?", options: ["Teodosio I", "Justiniano I", "Heraclio", "Basilio II"], answer: 1 },
+        { text: "¿En qué batalla naval de 1571 fue frenada la expansión otomana en el Mediterráneo occidental?", options: ["Navarino", "Lepanto", "Accio", "Trafalgar"], answer: 1 },
+        { text: "¿Qué dinastía china gobernaba cuando Marco Polo habría llegado a la corte de Kublai Kan?", options: ["Ming", "Qing", "Yuan", "Song"], answer: 2 },
+        { text: "¿Cuál fue la principal consecuencia geopolítica del Tratado de Tordesillas (1494)?", options: ["Fin de la Reconquista", "Reparto de zonas de expansión atlántica entre Castilla y Portugal", "Independencia de Brasil", "Creación de la Liga Hanseática"], answer: 1 },
+        { text: "¿Qué reforma impulsó Clístenes en Atenas hacia 508 a.C.?", options: ["Monarquía hereditaria", "Democracia basada en demos y consejo", "Tiranía militar", "Sistema feudal"], answer: 1 },
+        { text: "¿Qué conflicto enfrentó a Lancaster y York en Inglaterra?", options: ["Guerra de los Cien Años", "Guerra de las Dos Rosas", "Guerra Civil Inglesa", "Guerra de Sucesión"], answer: 1 },
+        { text: "¿Cuál fue el detonante inmediato de la Guerra de Crimea (1853)?", options: ["Crisis de Marruecos", "Disputa por lugares santos y expansión rusa sobre territorios otomanos", "Asesinato en Sarajevo", "Bloqueo continental napoleónico"], answer: 1 },
+        { text: "¿Qué líder encabezó la Restauración Meiji en Japón?", options: ["Tokugawa Ieyasu", "Emperador Mutsuhito", "Minamoto no Yoritomo", "Toyotomi Hideyoshi"], answer: 1 },
+        { text: "¿Cuál fue la capital del Imperio inca?", options: ["Quito", "Cuzco", "Tiahuanaco", "Chan Chan"], answer: 1 },
+        { text: "¿Qué acuerdo de 1978 sentó las bases de paz entre Egipto e Israel?", options: ["Acuerdos de Oslo", "Camp David", "Tratado de Sèvres", "Acuerdos de Dayton"], answer: 1 },
+        { text: "¿Qué evento de 1453 marcó el fin tradicional de la Edad Media para muchos historiadores?", options: ["Caída de Granada", "Caída de Constantinopla", "Toma de Jerusalén", "Reforma protestante"], answer: 1 },
+        { text: "¿Qué institución eclesiástica impulsó la Contrarreforma en el siglo XVI junto al Concilio de Trento?", options: ["Orden Teutónica", "Compañía de Jesús", "Cistercienses", "Caballeros Hospitalarios"], answer: 1 },
+        { text: "¿Quién fue el principal arquitecto de la unificación alemana en el siglo XIX?", options: ["Metternich", "Otto von Bismarck", "Guillermo II", "Hindenburg"], answer: 1 },
+        { text: "¿Qué batalla de 1815 puso fin definitivo al periodo napoleónico?", options: ["Austerlitz", "Waterloo", "Borodinó", "Leipzig"], answer: 1 },
+        { text: "¿Cuál fue la primera civilización en desarrollar escritura cuneiforme?", options: ["Egipcia", "Sumeria", "Hitita", "Fenicia"], answer: 1 },
+        { text: "¿Qué conferencia de 1884-1885 formalizó el reparto colonial de África entre potencias europeas?", options: ["Viena", "Yalta", "Berlín", "Potsdam"], answer: 2 },
+        { text: "¿Qué reforma religiosa inglesa rompió con Roma bajo Enrique VIII?", options: ["Acta de Uniformidad", "Acta de Supremacía", "Bill of Rights", "Edicto de Nantes"], answer: 1 },
+        { text: "¿Qué revolución de 1911 acabó con la dinastía Qing en China?", options: ["Revolución Cultural", "Revolución Xinhai", "Larga Marcha", "Levantamiento Bóxer"], answer: 1 },
+        { text: "¿Quién escribió 'El príncipe', obra central del pensamiento político renacentista?", options: ["Tomás Moro", "Nicolás Maquiavelo", "Erasmo de Róterdam", "Jean Bodin"], answer: 1 },
+        { text: "¿Qué acuerdo de 1938 permitió la anexión de los Sudetes por Alemania nazi?", options: ["Pacto Ribbentrop-Mólotov", "Acuerdo de Múnich", "Tratado de Locarno", "Plan Dawes"], answer: 1 },
+        { text: "¿Qué califato islámico tuvo su capital en Córdoba?", options: ["Abasí", "Omeya de al-Ándalus", "Fatimí", "Almohade"], answer: 1 },
+        { text: "¿Qué proceso histórico siguió inmediatamente al colapso de la URSS en 1991?", options: ["Unificación yugoslava", "Independencia de repúblicas soviéticas y transición postsoviética", "Creación del Pacto de Varsovia", "Anexión soviética de Europa oriental"], answer: 1 },
+        { text: "¿Qué batalla de 732 es citada como freno a la expansión omeya en Europa occidental?", options: ["Poitiers/Tours", "Hastings", "Maratón", "Cannas"], answer: 0 },
+        { text: "¿Qué civilización precolombina construyó Teotihuacán en su fase clásica?", options: ["Mexica", "Teotihuacana", "Maya", "Inca"], answer: 1 },
+        { text: "¿Qué documento inglés de 1215 limitó por primera vez el poder real?", options: ["Petition of Right", "Magna Carta", "Habeas Corpus Act", "Act of Settlement"], answer: 1 },
+        { text: "¿Qué guerra del siglo XVII devastó gran parte del Sacro Imperio Romano Germánico?", options: ["Guerra de Sucesión Española", "Guerra de los Treinta Años", "Guerra Franco-Prusiana", "Guerra del Norte"], answer: 1 },
+        { text: "¿Qué líder haitiano condujo la etapa decisiva de independencia tras Toussaint Louverture?", options: ["Henri Christophe", "Jean-Jacques Dessalines", "Alexandre Pétion", "Faustin Soulouque"], answer: 1 },
+        { text: "¿En qué año se firmó el Acta de Independencia de Colombia (Santa Fe)?", options: ["1810", "1819", "1821", "1830"], answer: 0 },
+        { text: "¿Qué emperador romano adoptó el cristianismo y convocó el Concilio de Nicea?", options: ["Constantino", "Nerón", "Trajano", "Diocleciano"], answer: 0 },
+        { text: "¿Qué imperio dominó Anatolia antes de la expansión persa aqueménida?", options: ["Hitita", "Cartaginés", "Macedonio", "Parto"], answer: 0 },
+        { text: "¿Qué batalla de 480 a.C. fue una victoria naval decisiva griega contra Persia?", options: ["Platea", "Salamina", "Termópilas", "Maratón"], answer: 1 },
+        { text: "¿Qué rey francés simboliza el absolutismo con la frase 'El Estado soy yo'?", options: ["Luis XIII", "Luis XIV", "Luis XV", "Luis XVI"], answer: 1 },
+        { text: "¿Qué reforma agraria y fiscal promovieron los Borbones en América en el siglo XVIII?", options: ["Reformas julianas", "Reformas borbónicas", "Reformas meiji", "Reformas liberales de Cádiz"], answer: 1 },
+        { text: "¿Qué plan económico impulsó EE.UU. para la reconstrucción europea tras la Segunda Guerra Mundial?", options: ["Plan Molotov", "Plan Marshall", "Pacto de Varsovia", "Acuerdo Bretton Woods"], answer: 1 },
+        { text: "¿Qué evento de 1917 llevó a los bolcheviques al poder en Rusia?", options: ["Revolución de Febrero", "Revolución de Octubre", "Domingo Sangriento", "Guerra civil"], answer: 1 },
+        { text: "¿Cuál fue la principal ciudad-estado rival de Atenas en la Guerra del Peloponeso?", options: ["Corinto", "Esparta", "Tebas", "Mileto"], answer: 1 },
+        { text: "¿Qué tratado de 1713 cerró gran parte de la Guerra de Sucesión Española?", options: ["Utrecht", "Aquisgrán", "Amiens", "Rastatt"], answer: 0 },
+        { text: "¿Qué cultura andina desarrolló extensamente terrazas agrícolas y el Qhapaq Ñan?", options: ["Moche", "Inca", "Nazca", "Chimú"], answer: 1 },
+        { text: "¿Qué crisis de 1962 puso al mundo al borde de una guerra nuclear?", options: ["Bloqueo de Berlín", "Crisis de los misiles en Cuba", "Guerra de Corea", "Invasión de Hungría"], answer: 1 }
       ],
       deportes: [
-        {
-          text: "¿Cuántos jugadores por equipo hay en cancha en fútbol?",
-          options: ["9", "10", "11", "12"],
-          answer: 2
-        },
-        {
-          text: "¿Qué país ganó el Mundial de fútbol 2010?",
-          options: ["Brasil", "España", "Alemania", "Argentina"],
-          answer: 1
-        },
-        {
-          text: "¿Cuánto dura un partido de baloncesto FIBA?",
-          options: ["32 minutos", "36 minutos", "40 minutos", "48 minutos"],
-          answer: 2
-        },
-        {
-          text: "¿En qué deporte es común el término birdie?",
-          options: ["Golf", "Tenis", "Natación", "Atletismo"],
-          answer: 0
-        },
-        {
-          text: "¿Cuántos sets se necesitan para ganar un partido de voleibol?",
-          options: ["2", "3", "4", "5"],
-          answer: 1
-        },
-        {
-          text: "¿Quién es conocido por dominar los 100m planos olímpicos?",
-          options: ["Carl Lewis", "Usain Bolt", "Mo Farah", "Noah Lyles"],
-          answer: 1
-        },
-        {
-          text: "¿Cuántos puntos vale un triple en baloncesto?",
-          options: ["1", "2", "3", "4"],
-          answer: 2
-        },
-        {
-          text: "¿En qué deporte compiten en Wimbledon?",
-          options: ["Golf", "Fórmula 1", "Tenis", "Béisbol"],
-          answer: 2
-        },
-        {
-          text: "¿Qué selección es conocida como la Canarinha?",
-          options: ["Argentina", "Brasil", "Uruguay", "Chile"],
-          answer: 1
-        },
-        {
-          text: "¿Cuántos jugadores titulares tiene un equipo de baloncesto?",
-          options: ["4", "5", "6", "7"],
-          answer: 1
-        },
-        {
-          text: "¿Cuántos hoyos tiene una ronda estándar de golf?",
-          options: ["9", "12", "18", "24"],
-          answer: 2
-        },
-        {
-          text: "¿En qué deporte se usa un volante (shuttlecock)?",
-          options: ["Tenis", "Bádminton", "Squash", "Ping-pong"],
-          answer: 1
-        },
-        {
-          text: "¿En qué país se celebra tradicionalmente el Tour de Francia?",
-          options: ["Italia", "España", "Francia", "Bélgica"],
-          answer: 2
-        },
-        {
-          text: "¿Cuántos periodos tiene un partido de hockey sobre hielo?",
-          options: ["2", "3", "4", "5"],
-          answer: 1
-        },
-        {
-          text: "¿En qué deporte compite Rafael Nadal?",
-          options: ["Ciclismo", "Natación", "Tenis", "Atletismo"],
-          answer: 2
-        },
-        {
-          text: "¿Cuántos anillos tiene el símbolo olímpico?",
-          options: ["4", "5", "6", "7"],
-          answer: 1
-        },
-        {
-          text: "¿En qué deporte se realiza un mate?",
-          options: ["Béisbol", "Baloncesto", "Voleibol", "Rugby"],
-          answer: 1
-        },
-        {
-          text: "¿Qué selección ganó el Mundial de fútbol 2014?",
-          options: ["España", "Argentina", "Brasil", "Alemania"],
-          answer: 3
-        },
-        {
-          text: "¿Cuál es la distancia oficial de una maratón?",
-          options: ["40 km", "41 km", "42,195 km", "45 km"],
-          answer: 2
-        },
-        {
-          text: "¿Cuántos jugadores hay por equipo en un partido oficial de voleibol en cancha?",
-          options: ["5", "6", "7", "8"],
-          answer: 1
-        }
+        { text: "¿Cuántos puntos otorga una conversión tras try en rugby union?", options: ["1", "2", "3", "4"], answer: 1 },
+        { text: "¿En tenis, qué significa completar un Golden Slam en carrera?", options: ["Ganar los 4 Grand Slam en un año", "Ganar los 4 Grand Slam y oro olímpico a lo largo de la carrera", "Ganar ATP Finals y Davis", "Ganar solo en césped"], answer: 1 },
+        { text: "¿Qué distancia tiene oficialmente la prueba de 110 vallas masculina?", options: ["100 m", "110 m", "120 m", "150 m"], answer: 1 },
+        { text: "¿Cuál es el peso del implemento en lanzamiento de bala masculino senior?", options: ["6 kg", "7,26 kg", "8 kg", "7 kg"], answer: 1 },
+        { text: "¿Qué reglamento define el fuera de juego en fútbol a partir de la posición respecto al penúltimo defensor?", options: ["Ley 11", "Ley 7", "Ley 3", "Ley 14"], answer: 0 },
+        { text: "¿Cuántos jugadores por equipo hay simultáneamente en waterpolo?", options: ["6", "7", "8", "9"], answer: 1 },
+        { text: "¿Cuál es la duración estándar de una pelea profesional de boxeo por título mundial masculino?", options: ["10 asaltos de 3 min", "12 asaltos de 3 min", "15 asaltos de 3 min", "12 asaltos de 2 min"], answer: 1 },
+        { text: "¿Qué significa PAR en golf?", options: ["Golpes promedio de los profesionales en un hoyo", "Golpes ideales fijados para completar un hoyo", "Límite de tiempo por hoyo", "Tipo de césped"], answer: 1 },
+        { text: "¿Qué país ha ganado más Copas del Mundo FIFA masculinas hasta 2026?", options: ["Alemania", "Italia", "Brasil", "Argentina"], answer: 2 },
+        { text: "¿Cuántas faltas personales excluyen por acumulación en NBA (temporada regular)?", options: ["5", "6", "7", "8"], answer: 1 },
+        { text: "¿En ciclismo de ruta, qué clasificación identifica al líder por tiempo acumulado en una gran vuelta?", options: ["Clasificación por puntos", "Clasificación de la montaña", "Clasificación general", "Clasificación joven"], answer: 2 },
+        { text: "¿Cuál es la longitud oficial de una piscina olímpica?", options: ["25 m", "33,3 m", "50 m", "60 m"], answer: 2 },
+        { text: "¿Qué superficie de tenis suele producir el bote más bajo y rápido?", options: ["Arcilla", "Césped", "Dura acrílica", "Moqueta lenta"], answer: 1 },
+        { text: "¿Cuántas competiciones puntúan en el decatlón?", options: ["8", "9", "10", "12"], answer: 2 },
+        { text: "¿Qué es un eagle en golf?", options: ["Un golpe sobre par", "Dos golpes bajo par", "Tres golpes bajo par", "Par en hoyo par 5"], answer: 1 },
+        { text: "¿Qué equipo de la NFL ha ganado más Super Bowls (empatado en la cima histórica)?", options: ["Dallas Cowboys", "New England Patriots", "Pittsburgh Steelers", "Patriots y Steelers comparten el máximo"], answer: 3 },
+        { text: "¿Cuánto dura el tiempo reglamentario en handball?", options: ["2x25 min", "2x30 min", "4x15 min", "2x35 min"], answer: 1 },
+        { text: "¿Qué significan las siglas DNF en automovilismo?", options: ["Did Not Finish", "Do Not Follow", "Driver Not Fast", "Downforce Not Fixed"], answer: 0 },
+        { text: "¿Cuántos jueces puntúan normalmente una pelea de boxeo profesional?", options: ["1", "2", "3", "5"], answer: 2 },
+        { text: "¿Cuál es la altura reglamentaria de la red en vóley masculino en cancha?", options: ["2,24 m", "2,35 m", "2,43 m", "2,50 m"], answer: 2 },
+        { text: "¿Qué modalidad del ciclismo en pista consiste en salida parada y persecución individual contra reloj?", options: ["Keirin", "Omnium", "Persecución individual", "Madison"], answer: 2 },
+        { text: "¿Cuántas dianas vale el centro (bullseye interior) en dardos estándar?", options: ["25", "40", "50", "60"], answer: 2 },
+        { text: "¿Qué campeón olímpico jamaicano posee récord mundial de 100 m y 200 m?", options: ["Yohan Blake", "Asafa Powell", "Usain Bolt", "Nesta Carter"], answer: 2 },
+        { text: "¿Qué elemento NO forma parte del triatlón olímpico?", options: ["Natación", "Ciclismo", "Remo", "Carrera"], answer: 2 },
+        { text: "¿Cuál es la distancia oficial del Ironman completo?", options: ["2 km + 90 km + 21 km", "3,8 km + 180 km + 42,195 km", "4 km + 160 km + 40 km", "1,5 km + 40 km + 10 km"], answer: 1 },
+        { text: "¿En béisbol, cuántos outs conforman media entrada?", options: ["2", "3", "4", "6"], answer: 1 },
+        { text: "¿Qué torneo de tenis se juega sobre arcilla y reparte ranking ATP/WTA mayor?", options: ["Wimbledon", "US Open", "Roland Garros", "Australian Open"], answer: 2 },
+        { text: "¿Cuántos minutos dura cada cuarto en FIBA?", options: ["8", "10", "12", "15"], answer: 1 },
+        { text: "¿Qué país tradicionalmente domina el sumo profesional, donde se celebra el honbasho?", options: ["China", "Corea del Sur", "Japón", "Mongolia"], answer: 2 },
+        { text: "¿Qué es un 'safety car' en Fórmula 1?", options: ["Coche médico", "Vehículo de seguridad que neutraliza temporalmente la carrera", "Coche reserva del campeón", "Modo de bajo consumo"], answer: 1 },
+        { text: "¿Cuántos jugadores titulares tiene un equipo de béisbol en defensa?", options: ["8", "9", "10", "11"], answer: 1 },
+        { text: "¿Qué superficie tiene mayor coeficiente de fricción en tenis de campo profesional?", options: ["Césped", "Arcilla", "Hard", "Sintética rápida"], answer: 1 },
+        { text: "¿Cuál es el nombre de la prueba reina del ciclismo de un día en Bélgica con tramos de adoquín?", options: ["Lieja-Bastoña-Lieja", "París-Roubaix", "Milán-San Remo", "Il Lombardia"], answer: 1 },
+        { text: "¿Qué deporte usa puntuación ippon para victoria inmediata?", options: ["Taekwondo", "Judo", "Karate kata", "Esgrima"], answer: 1 },
+        { text: "¿Qué significa 'ace' en voleibol?", options: ["Remate fuera", "Saque directo que da punto sin devolución", "Bloqueo doble", "Error de rotación"], answer: 1 },
+        { text: "¿Cuántos periodos reglamentarios tiene un partido de hockey sobre hielo?", options: ["2", "3", "4", "5"], answer: 1 },
+        { text: "¿Qué unidad se usa para medir potencia en ciclismo con potenciómetro?", options: ["Joule", "Watt", "Newton", "Pascal"], answer: 1 },
+        { text: "¿Cuál fue la sede del Mundial de fútbol 2002 (masculino)?", options: ["Japón y Corea del Sur", "Alemania", "Sudáfrica", "Francia"], answer: 0 },
+        { text: "¿Cuántas medallas de oro olímpicas ganó Michael Phelps en su carrera?", options: ["18", "20", "23", "28"], answer: 2 },
+        { text: "¿En ajedrez, cómo se llama el empate por repetición de la misma posición tres veces?", options: ["Ahogado", "Tablas por repetición triple", "Zugzwang", "Regla de 50 jugadas"], answer: 1 }
       ],
       ciencias: [
-        {
-          text: "¿Cuál es el planeta más grande del sistema solar?",
-          options: ["Saturno", "Júpiter", "Neptuno", "Marte"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es el gas más abundante en la atmósfera terrestre?",
-          options: ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Helio"],
-          answer: 2
-        },
-        {
-          text: "¿Qué partícula tiene carga negativa?",
-          options: ["Protón", "Neutrón", "Electrón", "Fotón"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la fórmula química del agua?",
-          options: ["CO2", "H2O", "NaCl", "O2"],
-          answer: 1
-        },
-        {
-          text: "¿Qué órgano bombea la sangre en el cuerpo humano?",
-          options: ["Pulmón", "Hígado", "Riñón", "Corazón"],
-          answer: 3
-        },
-        {
-          text: "¿Qué fuerza mantiene a los planetas en órbita?",
-          options: ["Fricción", "Gravedad", "Magnetismo", "Energía nuclear"],
-          answer: 1
-        },
-        {
-          text: "¿Qué planeta es conocido como el planeta rojo?",
-          options: ["Venus", "Marte", "Júpiter", "Mercurio"],
-          answer: 1
-        },
-        {
-          text: "¿Qué unidad mide la corriente eléctrica?",
-          options: ["Voltio", "Ohmio", "Amperio", "Julio"],
-          answer: 2
-        },
-        {
-          text: "¿Qué científico propuso la teoría de la relatividad?",
-          options: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"],
-          answer: 1
-        },
-        {
-          text: "¿Qué órganos se encargan principalmente de filtrar la sangre?",
-          options: ["Pulmones", "Riñones", "Intestinos", "Páncreas"],
-          answer: 1
-        },
-        {
-          text: "¿Qué tipo de energía proviene directamente del Sol?",
-          options: ["Eólica", "Hidráulica", "Solar", "Geotérmica"],
-          answer: 2
-        },
-        {
-          text: "¿Qué elemento químico tiene el símbolo Au?",
-          options: ["Plata", "Oro", "Aluminio", "Argón"],
-          answer: 1
-        },
-        {
-          text: "¿Qué estado de la materia no tiene forma ni volumen fijos?",
-          options: ["Sólido", "Líquido", "Plasma", "Gas"],
-          answer: 3
-        },
-        {
-          text: "¿Cuántos cromosomas tiene normalmente una célula humana?",
-          options: ["23", "44", "46", "48"],
-          answer: 2
-        },
-        {
-          text: "¿Qué órgano coordina pensamiento y memoria?",
-          options: ["Cerebro", "Corazón", "Hígado", "Estómago"],
-          answer: 0
-        },
-        {
-          text: "¿Qué vitamina se sintetiza con ayuda de la luz solar?",
-          options: ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina K"],
-          answer: 2
-        },
-        {
-          text: "¿Qué capa atmosférica ayuda a bloquear la radiación UV?",
-          options: ["Troposfera", "Ionosfera", "Capa de ozono", "Exosfera"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la velocidad aproximada de la luz en el vacío?",
-          options: ["150.000 km/s", "300.000 km/s", "30.000 km/s", "3.000 km/s"],
-          answer: 1
-        },
-        {
-          text: "¿Qué instrumento se usa para medir temperatura?",
-          options: ["Barómetro", "Termómetro", "Higrómetro", "Anemómetro"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es el pH aproximado de una solución neutra?",
-          options: ["5", "6", "7", "8"],
-          answer: 2
-        }
+        { text: "¿Qué ecuación relaciona energía y frecuencia de un fotón?", options: ["E=mc²", "E=hf", "PV=nRT", "F=ma"], answer: 1 },
+        { text: "¿Qué orgánulo celular realiza principalmente la fosforilación oxidativa?", options: ["Ribosoma", "Mitocondria", "Lisosoma", "Aparato de Golgi"], answer: 1 },
+        { text: "¿Qué ley establece que el volumen de un gas es inversamente proporcional a la presión a T constante?", options: ["Ley de Charles", "Ley de Boyle", "Ley de Gay-Lussac", "Ley de Avogadro"], answer: 1 },
+        { text: "¿Qué partícula mediadora se asocia a la interacción electromagnética?", options: ["Gluón", "Fotón", "Bosón W", "Gravitón"], answer: 1 },
+        { text: "¿Cuál es el nombre del proceso por el cual una estrella como el Sol produce energía?", options: ["Fisión nuclear", "Fusión nuclear", "Desintegración beta", "Combustión química"], answer: 1 },
+        { text: "¿Qué base nitrogenada está presente en ARN pero no en ADN?", options: ["Timina", "Uracilo", "Guanina", "Citosina"], answer: 1 },
+        { text: "¿Qué científico formuló las ecuaciones clásicas del electromagnetismo?", options: ["Faraday", "Ampère", "Maxwell", "Planck"], answer: 2 },
+        { text: "¿Qué escala sísmica mide energía liberada y ha sustituido en gran parte a Richter?", options: ["Mercalli", "Momento sísmico (Mw)", "Beaufort", "Fujita"], answer: 1 },
+        { text: "¿Qué tipo de enlace une nucleótidos adyacentes en una cadena de ADN?", options: ["Puente de hidrógeno", "Iónico", "Fosfodiéster", "Peptídico"], answer: 2 },
+        { text: "¿Qué fenómeno describe la desviación aparente de objetos en movimiento por la rotación terrestre?", options: ["Efecto Doppler", "Efecto Coriolis", "Precesión", "Resonancia"], answer: 1 },
+        { text: "¿Cuál es el valor aproximado de la constante de gravitación universal G?", options: ["6,67×10^-11 N·m²/kg²", "9,81 m/s²", "3,00×10^8 m/s", "1,60×10^-19 C"], answer: 0 },
+        { text: "¿Qué ley de la termodinámica introduce el concepto de entropía?", options: ["Primera", "Segunda", "Tercera", "Ley cero"], answer: 1 },
+        { text: "¿Qué método usa CRISPR-Cas9 en biotecnología?", options: ["Secuenciación proteica", "Edición genética dirigida", "Clonación por transferencia nuclear obligatoria", "PCR cuantitativa"], answer: 1 },
+        { text: "¿Qué metal de transición tiene configuración electrónica [Ar]3d10 4s1?", options: ["Níquel", "Cobre", "Zinc", "Cromo"], answer: 1 },
+        { text: "¿Qué fuerza intermolecular explica el alto punto de ebullición del agua?", options: ["Dipolo inducido", "Puente de hidrógeno", "Van der Waals débil", "Enlace metálico"], answer: 1 },
+        { text: "¿Qué enunciado describe mejor la paradoja de Fermi?", options: ["No hay energía oscura", "Alta probabilidad de vida extraterrestre, pero sin evidencias observadas", "La expansión del universo se frena", "Los quásares son estrellas"], answer: 1 },
+        { text: "¿Qué capa de la atmósfera contiene la mayor parte del ozono estratosférico?", options: ["Troposfera", "Estratosfera", "Mesosfera", "Termosfera"], answer: 1 },
+        { text: "¿Cuál es la unidad SI de capacitancia eléctrica?", options: ["Ohm", "Henry", "Faradio", "Tesla"], answer: 2 },
+        { text: "¿Qué tipo de mutación no altera la secuencia aminoacídica final?", options: ["Missense", "Nonsense", "Silenciosa", "Frameshift"], answer: 2 },
+        { text: "¿Qué postulado central plantea la teoría celular moderna?", options: ["Las células surgen por generación espontánea", "Toda célula proviene de otra célula preexistente", "Solo animales tienen células", "El núcleo no contiene material genético"], answer: 1 },
+        { text: "¿Qué compuesto actúa como principal moneda energética celular?", options: ["ADP", "ATP", "NADH", "FAD"], answer: 1 },
+        { text: "¿Qué parámetro orbital describe la 'inclinación' de una órbita respecto a un plano de referencia?", options: ["Excentricidad", "Anomalía media", "Inclinación orbital", "Semieje menor"], answer: 2 },
+        { text: "¿Qué tipo de onda es la luz en el vacío según el electromagnetismo clásico?", options: ["Mecánica longitudinal", "Electromagnética transversal", "Escalar estacionaria", "Sónica"], answer: 1 },
+        { text: "¿Qué elemento presenta mayor electronegatividad en la tabla periódica?", options: ["Oxígeno", "Cloro", "Flúor", "Nitrógeno"], answer: 2 },
+        { text: "¿Qué ecuación describe la relación entre pH y concentración de protones?", options: ["pH = [H+]", "pH = -log10[H+]", "pH = log10[OH-]", "pH = [OH-]/[H+]"], answer: 1 },
+        { text: "¿Cuál es la función principal de los ribosomas?", options: ["Replicar ADN", "Sintetizar proteínas", "Oxidar glucosa", "Transportar lípidos"], answer: 1 },
+        { text: "¿Qué proceso geológico forma basaltos en dorsales oceánicas?", options: ["Subducción continental", "Magmatismo por descompresión del manto", "Metamorfismo regional", "Erosión eólica"], answer: 1 },
+        { text: "¿Qué nombre recibe la partícula hipotética asociada al campo de Higgs, confirmada en 2012?", options: ["Bosón de Higgs", "Taón", "Muón", "Neutrino estéril"], answer: 0 },
+        { text: "¿Qué taxón incluye organismos eucariotas pluricelulares con pared celular de quitina?", options: ["Plantae", "Protista", "Fungi", "Monera"], answer: 2 },
+        { text: "¿Qué ley de Kepler establece que los planetas barren áreas iguales en tiempos iguales?", options: ["Primera", "Segunda", "Tercera", "Ley gravitacional"], answer: 1 },
+        { text: "¿Qué magnitud representa el número de moles de soluto por litro de disolución?", options: ["Molalidad", "Molaridad", "Normalidad", "Fracción molar"], answer: 1 },
+        { text: "¿Qué isótopo se usa ampliamente en datación radiocarbónica?", options: ["Carbono-12", "Carbono-14", "Uranio-235", "Plomo-206"], answer: 1 },
+        { text: "¿Cuál es la principal función de la hemoglobina?", options: ["Almacenar glucosa", "Transportar oxígeno en sangre", "Coagular sangre", "Destruir patógenos"], answer: 1 },
+        { text: "¿Qué tipo de reacción metabólica libera energía al degradar moléculas complejas?", options: ["Anabólica", "Catabólica", "Isotérmica", "Endergónica"], answer: 1 },
+        { text: "¿Qué principio cuántico afirma que no se puede conocer simultáneamente posición y momento con precisión arbitraria?", options: ["Exclusión de Pauli", "Dualidad onda-partícula", "Incertidumbre de Heisenberg", "Superposición"], answer: 2 },
+        { text: "¿Qué estructura del oído interno transforma vibraciones en impulsos nerviosos?", options: ["Martillo", "Cóclea", "Tímpano", "Trompa de Eustaquio"], answer: 1 },
+        { text: "¿Qué variable se mantiene constante en una transformación isocórica?", options: ["Presión", "Volumen", "Temperatura", "Masa molar"], answer: 1 },
+        { text: "¿Qué nube interestelar compuesta por polvo y gas puede colapsar para formar estrellas?", options: ["Nebulosa molecular", "Púlsar", "Cuásar", "Enana blanca"], answer: 0 },
+        { text: "¿Qué tipo de placa tectónica suele subducir bajo otra en un margen convergente océano-continente?", options: ["Continental", "Oceánica", "Microplaca exclusivamente continental", "No hay subducción"], answer: 1 },
+        { text: "¿Qué biomolécula forma la bicapa principal de las membranas celulares?", options: ["Triglicéridos", "Fosfolípidos", "Esteroides puros", "Polisacáridos"], answer: 1 }
       ],
       geografia: [
-        {
-          text: "¿Cuál es la capital de Japón?",
-          options: ["Seúl", "Beijing", "Tokio", "Bangkok"],
-          answer: 2
-        },
-        {
-          text: "¿En qué continente está Egipto?",
-          options: ["Asia", "África", "Europa", "Oceanía"],
-          answer: 1
-        },
-        {
-          text: "¿Qué océano baña la costa occidental de Colombia?",
-          options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
-          answer: 3
-        },
-        {
-          text: "¿Qué país europeo tiene forma de bota?",
-          options: ["Grecia", "Portugal", "Italia", "Croacia"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la montaña más alta del mundo sobre el nivel del mar?",
-          options: ["K2", "Everest", "Aconcagua", "Kilimanjaro"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es el río más caudaloso del mundo?",
-          options: ["Nilo", "Yangtsé", "Amazonas", "Misisipi"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la capital de Canadá?",
-          options: ["Toronto", "Ottawa", "Montreal", "Vancouver"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es el desierto cálido más grande del mundo?",
-          options: ["Sahara", "Gobi", "Kalahari", "Atacama"],
-          answer: 0
-        },
-        {
-          text: "¿Cuál es el país más grande por superficie?",
-          options: ["Canadá", "Rusia", "China", "Estados Unidos"],
-          answer: 1
-        },
-        {
-          text: "¿Qué cordillera atraviesa gran parte de Sudamérica?",
-          options: ["Alpes", "Andes", "Himalaya", "Pirineos"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es la capital de Australia?",
-          options: ["Sídney", "Melbourne", "Canberra", "Perth"],
-          answer: 2
-        },
-        {
-          text: "¿Qué país limita con Colombia por el istmo de Panamá?",
-          options: ["Costa Rica", "Venezuela", "Panamá", "Ecuador"],
-          answer: 2
-        },
-        {
-          text: "¿Qué mar separa Europa y África?",
-          options: ["Mar del Norte", "Mar Mediterráneo", "Mar Báltico", "Mar Negro"],
-          answer: 1
-        },
-        {
-          text: "¿En qué continente se encuentra Perú?",
-          options: ["Europa", "África", "América del Sur", "Oceanía"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la capital de Argentina?",
-          options: ["Santiago", "Montevideo", "Lima", "Buenos Aires"],
-          answer: 3
-        },
-        {
-          text: "¿Cuál es el país más poblado de África?",
-          options: ["Egipto", "Sudáfrica", "Nigeria", "Argelia"],
-          answer: 2
-        },
-        {
-          text: "¿Cuál es la isla más grande del mundo?",
-          options: ["Madagascar", "Groenlandia", "Borneo", "Nueva Guinea"],
-          answer: 1
-        },
-        {
-          text: "¿Cuál es el lago de agua dulce más grande por superficie?",
-          options: ["Lago Victoria", "Lago Superior", "Lago Baikal", "Lago Tanganica"],
-          answer: 1
-        },
-        {
-          text: "¿Qué país tiene como capital a Lisboa?",
-          options: ["España", "Portugal", "Italia", "Grecia"],
-          answer: 1
-        },
-        {
-          text: "¿Qué lugar es conocido por ser uno de los puntos más bajos de la superficie terrestre?",
-          options: ["Mar Muerto", "Monte Everest", "Gran Cañón", "Lago Titicaca"],
-          answer: 0
-        }
+        { text: "¿Qué estrecho conecta el mar Mediterráneo con el océano Atlántico?", options: ["Bósforo", "Dardanelos", "Gibraltar", "Ormuz"], answer: 2 },
+        { text: "¿Cuál es la capital administrativa de Bolivia?", options: ["Sucre", "La Paz", "Cochabamba", "Santa Cruz"], answer: 1 },
+        { text: "¿Qué país tiene mayor longitud de costa en el mundo?", options: ["Rusia", "Australia", "Canadá", "Indonesia"], answer: 2 },
+        { text: "¿Qué cordillera separa en gran parte Europa de Asia junto al río Ural?", options: ["Cáucaso", "Urales", "Alpes", "Cárpatos"], answer: 1 },
+        { text: "¿Cuál es el punto más elevado de África?", options: ["Monte Kenia", "Kilimanjaro", "Toubkal", "Ras Dashen"], answer: 1 },
+        { text: "¿Qué río atraviesa Viena, Bratislava, Budapest y Belgrado?", options: ["Rin", "Danubio", "Elba", "Dniéper"], answer: 1 },
+        { text: "¿Qué país africano no tiene salida al mar y limita con 8 países, incluida Tanzania?", options: ["Ruanda", "Uganda", "Zambia", "Etiopía"], answer: 2 },
+        { text: "¿Cuál es la capital de Kazajistán (nombre vigente desde 2022)?", options: ["Almatý", "Astaná", "Shymkent", "Taraz"], answer: 1 },
+        { text: "¿Qué país posee el mayor número de husos horarios si se incluyen territorios ultramarinos?", options: ["Rusia", "Estados Unidos", "Francia", "Reino Unido"], answer: 2 },
+        { text: "¿Qué mar interior limita con Irán, Kazajistán, Turkmenistán, Azerbaiyán y Rusia?", options: ["Mar Negro", "Mar Caspio", "Mar de Aral", "Mar Rojo"], answer: 1 },
+        { text: "¿Qué ciudad es la capital de Nueva Zelanda?", options: ["Auckland", "Christchurch", "Wellington", "Hamilton"], answer: 2 },
+        { text: "¿Qué país sudamericano tiene la mayor extensión amazónica?", options: ["Perú", "Colombia", "Brasil", "Venezuela"], answer: 2 },
+        { text: "¿Qué desierto se extiende por China y Mongolia?", options: ["Taklamakán", "Gobi", "Karakum", "Negev"], answer: 1 },
+        { text: "¿Qué cadena montañosa cruza Marruecos, Argelia y Túnez?", options: ["Atlas", "Apalaches", "Drakensberg", "Alborz"], answer: 0 },
+        { text: "¿Cuál es el país insular más grande del Caribe por superficie?", options: ["República Dominicana", "Cuba", "Jamaica", "Puerto Rico"], answer: 1 },
+        { text: "¿Qué río forma parte de la frontera entre México y Estados Unidos?", options: ["Colorado", "Río Bravo/Río Grande", "Misisipi", "Yukón"], answer: 1 },
+        { text: "¿Cuál es la capital de Etiopía?", options: ["Nairobi", "Adís Abeba", "Kampala", "Jartum"], answer: 1 },
+        { text: "¿Qué país europeo tiene más islas oficialmente registradas?", options: ["Grecia", "Italia", "Suecia", "Croacia"], answer: 2 },
+        { text: "¿Qué península comparten Noruega y Suecia?", options: ["Jutlandia", "Kola", "Escandinava", "Balcánica"], answer: 2 },
+        { text: "¿Qué mar baña la costa occidental de Arabia Saudita?", options: ["Mar Arábigo", "Mar Rojo", "Golfo Pérsico", "Mar Negro"], answer: 1 },
+        { text: "¿Qué país tiene como capital a Ulán Bator?", options: ["Kazajistán", "Mongolia", "Kirguistán", "Uzbekistán"], answer: 1 },
+        { text: "¿Cuál es el lago más profundo del mundo?", options: ["Superior", "Tanganica", "Baikal", "Malawi"], answer: 2 },
+        { text: "¿Qué línea imaginaria divide la Tierra en hemisferios norte y sur?", options: ["Trópico de Cáncer", "Ecuador", "Meridiano de Greenwich", "Círculo polar"], answer: 1 },
+        { text: "¿Qué país tiene frontera terrestre con Dinamarca?", options: ["Suecia", "Países Bajos", "Alemania", "Bélgica"], answer: 2 },
+        { text: "¿Qué ciudad es la capital de Myanmar?", options: ["Yangón", "Naypyidaw", "Mandalay", "Bago"], answer: 1 },
+        { text: "¿Qué estrecho separa Asia de América entre Rusia y Alaska?", options: ["Magallanes", "Bering", "Malaca", "Bab el-Mandeb"], answer: 1 },
+        { text: "¿Qué país del sudeste asiático tiene dos porciones separadas por el mar de la China Meridional?", options: ["Tailandia", "Malasia", "Vietnam", "Camboya"], answer: 1 },
+        { text: "¿Cuál es la capital de Islandia?", options: ["Akureyri", "Reikiavik", "Kópavogur", "Selfoss"], answer: 1 },
+        { text: "¿Qué país africano es atravesado por el ecuador y tiene costa en el golfo de Guinea?", options: ["Gabón", "Guinea Ecuatorial", "Congo", "Ambos: Gabón y Guinea Ecuatorial"], answer: 3 },
+        { text: "¿Qué relieve domina el interior de la Península Ibérica?", options: ["Meseta Central", "Llanura del Po", "Cuenca Panónica", "Macizo Bohemio"], answer: 0 },
+        { text: "¿Qué país alberga la mayor parte del desierto del Kalahari?", options: ["Namibia", "Botsuana", "Sudáfrica", "Angola"], answer: 1 },
+        { text: "¿Qué estado de EE.UU. no colinda con ninguno de los otros 48 continentales?", options: ["Hawái", "Alaska", "Ambos", "Florida"], answer: 2 },
+        { text: "¿Qué océano es el segundo más grande por superficie?", options: ["Índico", "Atlántico", "Ártico", "Pacífico"], answer: 1 },
+        { text: "¿Qué país tiene como capital a Tiflis (Tbilisi)?", options: ["Armenia", "Georgia", "Azerbaiyán", "Moldavia"], answer: 1 },
+        { text: "¿Qué delta fluvial se considera el más grande del mundo?", options: ["Delta del Nilo", "Delta del Ganges-Brahmaputra-Meghna", "Delta del Mekong", "Delta del Orinoco"], answer: 1 },
+        { text: "¿Qué macizo montañoso separa Europa oriental de Asia menor en torno al mar Negro?", options: ["Alpes", "Cáucaso", "Apeninos", "Dináricos"], answer: 1 },
+        { text: "¿Qué país sudamericano NO limita con Brasil?", options: ["Ecuador", "Paraguay", "Perú", "Venezuela"], answer: 0 },
+        { text: "¿Cuál es la capital de Sri Lanka (administrativa)?", options: ["Colombo", "Sri Jayawardenepura Kotte", "Kandy", "Galle"], answer: 1 },
+        { text: "¿Qué río europeo desemboca en el mar del Norte tras pasar por Alemania y Países Bajos?", options: ["Danubio", "Rin", "Vístula", "Loira"], answer: 1 },
+        { text: "¿Qué país tiene la mayor altura media de América del Sur?", options: ["Chile", "Perú", "Bolivia", "Ecuador"], answer: 2 }
       ],
       entretenimiento: [
-        {
-          text: "¿Cómo se llama el mago protagonista de Hogwarts?",
-          options: ["Harry Potter", "Frodo Bolsón", "Percy Jackson", "Newt Scamander"],
-          answer: 0
-        },
-        {
-          text: "¿Qué saga incluye a Luke Skywalker?",
-          options: ["Star Trek", "Star Wars", "Dune", "Matrix"],
-          answer: 1
-        },
-        {
-          text: "¿Qué película animada tiene a Simba como personaje principal?",
-          options: ["Shrek", "Madagascar", "El Rey León", "Mulan"],
-          answer: 2
-        },
-        {
-          text: "¿Qué instrumento suele tener 88 teclas?",
-          options: ["Violín", "Piano", "Flauta", "Guitarra"],
-          answer: 1
-        },
-        {
-          text: "¿Qué plataforma es conocida por videos cortos virales?",
-          options: ["Wikipedia", "TikTok", "Dropbox", "Reddit"],
-          answer: 1
-        },
-        {
-          text: "¿Quién canta la canción Billie Jean?",
-          options: ["Michael Jackson", "Bruno Mars", "Freddie Mercury", "Ed Sheeran"],
-          answer: 0
-        },
-        {
-          text: "¿Qué superhéroe es conocido como el Hombre Murciélago?",
-          options: ["Superman", "Batman", "Iron Man", "Flash"],
-          answer: 1
-        },
-        {
-          text: "¿Qué serie tiene al personaje Walter White?",
-          options: ["Breaking Bad", "Friends", "Dark", "Sherlock"],
-          answer: 0
-        },
-        {
-          text: "¿Qué banda lanzó la canción Bohemian Rhapsody?",
-          options: ["The Beatles", "Queen", "Coldplay", "Nirvana"],
-          answer: 1
-        },
-        {
-          text: "¿Cómo se llama la princesa que suele ser rescatada por Mario?",
-          options: ["Zelda", "Peach", "Samus", "Daisy"],
-          answer: 1
-        },
-        {
-          text: "¿Qué actor interpretó a Jack en Titanic?",
-          options: ["Brad Pitt", "Tom Cruise", "Leonardo DiCaprio", "Johnny Depp"],
-          answer: 2
-        },
-        {
-          text: "¿Qué saga de videojuegos incluye a Link y Zelda?",
-          options: ["Final Fantasy", "The Legend of Zelda", "Halo", "Metroid"],
-          answer: 1
-        },
-        {
-          text: "¿Qué cantante es conocida como la Reina del Pop?",
-          options: ["Madonna", "Shakira", "Adele", "Rihanna"],
-          answer: 0
-        },
-        {
-          text: "¿Qué película ganó el Óscar a mejor película en 2020?",
-          options: ["1917", "Joker", "Parásitos", "Ford v Ferrari"],
-          answer: 2
-        },
-        {
-          text: "¿Cómo se conoce el universo cinematográfico de Marvel?",
-          options: ["MCU", "DCEU", "UCMX", "MVU"],
-          answer: 0
-        },
-        {
-          text: "¿Qué grupo surcoreano lanzó la canción Dynamite?",
-          options: ["BLACKPINK", "EXO", "BTS", "TXT"],
-          answer: 2
-        },
-        {
-          text: "¿Quién dirigió la trilogía de El Señor de los Anillos?",
-          options: ["James Cameron", "Peter Jackson", "Christopher Nolan", "Ridley Scott"],
-          answer: 1
-        },
-        {
-          text: "¿Qué serie animada transcurre en Springfield con una familia amarilla?",
-          options: ["Family Guy", "Los Simpson", "Futurama", "South Park"],
-          answer: 1
-        },
-        {
-          text: "¿Qué red social es conocida por fotos, historias y reels?",
-          options: ["LinkedIn", "Instagram", "X", "Pinterest"],
-          answer: 1
-        },
-        {
-          text: "¿Cómo se llama el Hechicero Supremo de Marvel?",
-          options: ["Loki", "Doctor Strange", "Vision", "Hawkeye"],
-          answer: 1
-        }
+        { text: "¿Qué película ganó el Óscar a Mejor Película en 2024 (premios 96.ª edición)?", options: ["Oppenheimer", "Poor Things", "The Holdovers", "Anatomy of a Fall"], answer: 0 },
+        { text: "¿Quién compuso la banda sonora principal de 'Interstellar'?", options: ["John Williams", "Hans Zimmer", "Howard Shore", "Alexandre Desplat"], answer: 1 },
+        { text: "¿Qué estudio desarrolló originalmente 'The Last of Us'?", options: ["Santa Monica Studio", "Naughty Dog", "Insomniac Games", "BioWare"], answer: 1 },
+        { text: "¿Cuál es el nombre del director de 'Parasite' (2019)?", options: ["Park Chan-wook", "Bong Joon-ho", "Kim Jee-woon", "Lee Chang-dong"], answer: 1 },
+        { text: "¿Qué álbum de Pink Floyd incluye 'Time' y 'Money'?", options: ["The Wall", "Wish You Were Here", "The Dark Side of the Moon", "Animals"], answer: 2 },
+        { text: "¿Qué franquicia de juegos popularizó el género 'battle royale' moderno con gran impacto competitivo?", options: ["Fortnite", "PUBG", "Apex Legends", "Warzone"], answer: 1 },
+        { text: "¿Qué actriz interpreta a Daenerys Targaryen en 'Game of Thrones'?", options: ["Natalie Dormer", "Emilia Clarke", "Lena Headey", "Sophie Turner"], answer: 1 },
+        { text: "¿Qué película de Christopher Nolan trata sobre la evacuación de la Segunda Guerra Mundial?", options: ["Tenet", "Dunkirk", "Memento", "The Prestige"], answer: 1 },
+        { text: "¿Qué compositor escribió 'Las cuatro estaciones'?", options: ["Bach", "Vivaldi", "Mozart", "Haydn"], answer: 1 },
+        { text: "¿Qué anime fue creado por Hajime Isayama?", options: ["Death Note", "Attack on Titan", "Demon Slayer", "One Punch Man"], answer: 1 },
+        { text: "¿Cuál fue el primer largometraje animado de Disney?", options: ["Fantasía", "Pinocho", "Blancanieves y los siete enanitos", "Dumbo"], answer: 2 },
+        { text: "¿Qué saga cinematográfica presenta el planeta Arrakis?", options: ["Star Wars", "Dune", "Avatar", "Foundation"], answer: 1 },
+        { text: "¿Quién dirigió 'Blade Runner 2049'?", options: ["Ridley Scott", "Denis Villeneuve", "David Fincher", "James Cameron"], answer: 1 },
+        { text: "¿Qué videojuego incluye las ciudades de Novigrado y Kaer Morhen?", options: ["Skyrim", "The Witcher 3", "Dragon Age: Inquisition", "Elden Ring"], answer: 1 },
+        { text: "¿Qué banda lanzó el álbum 'OK Computer'?", options: ["Muse", "Blur", "Radiohead", "Oasis"], answer: 2 },
+        { text: "¿Qué actriz ganó el Óscar por su papel en 'La La Land' (2016)?", options: ["Emma Stone", "Natalie Portman", "Jennifer Lawrence", "Saoirse Ronan"], answer: 0 },
+        { text: "¿Qué plataforma produjo la serie alemana 'Dark'?", options: ["HBO", "Netflix", "Prime Video", "Apple TV+"], answer: 1 },
+        { text: "¿Qué director está detrás de 'Spirited Away'?", options: ["Makoto Shinkai", "Hayao Miyazaki", "Mamoru Hosoda", "Satoshi Kon"], answer: 1 },
+        { text: "¿Qué personaje interpreta Cillian Murphy en 'Peaky Blinders'?", options: ["Arthur Shelby", "Tommy Shelby", "Alfie Solomons", "Michael Gray"], answer: 1 },
+        { text: "¿Qué saga de juegos incluye el personaje Master Chief?", options: ["Mass Effect", "Halo", "Gears of War", "Destiny"], answer: 1 },
+        { text: "¿Qué película de ciencia ficción de 1999 popularizó la frase 'there is no spoon'?", options: ["Dark City", "The Matrix", "Gattaca", "Equilibrium"], answer: 1 },
+        { text: "¿Quién escribió la novela 'Cien años de soledad'?", options: ["Mario Vargas Llosa", "Gabriel García Márquez", "Julio Cortázar", "Carlos Fuentes"], answer: 1 },
+        { text: "¿Qué artista lanzó el álbum 'To Pimp a Butterfly'?", options: ["J. Cole", "Kendrick Lamar", "Drake", "Childish Gambino"], answer: 1 },
+        { text: "¿Qué serie antológica tecnológica incluyó el episodio 'San Junipero'?", options: ["Love, Death & Robots", "Black Mirror", "Electric Dreams", "Severance"], answer: 1 },
+        { text: "¿Cuál es el nombre del protagonista de 'Red Dead Redemption 2'?", options: ["John Marston", "Arthur Morgan", "Dutch van der Linde", "Micah Bell"], answer: 1 },
+        { text: "¿Qué película coreana ganó la Palma de Oro y luego el Óscar a mejor película?", options: ["Oldboy", "Burning", "Parasite", "Train to Busan"], answer: 2 },
+        { text: "¿Qué compositor firmó la música de la trilogía original de 'Star Wars'?", options: ["John Williams", "Ennio Morricone", "Jerry Goldsmith", "Danny Elfman"], answer: 0 },
+        { text: "¿Qué estudio creó la saga 'Dark Souls'?", options: ["Capcom", "FromSoftware", "Square Enix", "Konami"], answer: 1 },
+        { text: "¿Quién interpreta a Joker en 'The Dark Knight' (2008)?", options: ["Joaquin Phoenix", "Jared Leto", "Heath Ledger", "Jack Nicholson"], answer: 2 },
+        { text: "¿Qué película ganó el Óscar a mejor película en 2020?", options: ["1917", "Joker", "Parásitos", "Ford v Ferrari"], answer: 2 },
+        { text: "¿Qué banda británica lanzó 'A Rush of Blood to the Head'?", options: ["Keane", "Coldplay", "Travis", "The Verve"], answer: 1 },
+        { text: "¿Qué directora dirigió 'Nomadland'?", options: ["Greta Gerwig", "Chloé Zhao", "Sofia Coppola", "Patty Jenkins"], answer: 1 },
+        { text: "¿Qué serie gira en torno a una empresa llamada Lumon Industries?", options: ["Westworld", "Severance", "Mr. Robot", "Homecoming"], answer: 1 },
+        { text: "¿Qué videojuego de Valve popularizó el género MOBA moderno competitivo junto a LoL?", options: ["Team Fortress 2", "Dota 2", "Counter-Strike", "Artifact"], answer: 1 },
+        { text: "¿Qué actor interpreta a Tony Soprano en 'The Sopranos'?", options: ["Edie Falco", "James Gandolfini", "Michael Imperioli", "Steve Buscemi"], answer: 1 },
+        { text: "¿Qué canción de Queen está estructurada como mini-ópera rock y salió en 1975?", options: ["Somebody to Love", "Bohemian Rhapsody", "We Are the Champions", "Killer Queen"], answer: 1 },
+        { text: "¿Qué película de Denis Villeneuve adapta la novela de Frank Herbert?", options: ["Arrival", "Blade Runner 2049", "Dune", "Sicario"], answer: 2 },
+        { text: "¿Cuál es la consola de Nintendo lanzada en 2017 con concepto híbrido?", options: ["Wii U", "Switch", "3DS", "GameCube"], answer: 1 },
+        { text: "¿Qué saga cinematográfica incluye a Ethan Hunt como protagonista?", options: ["Bourne", "Misión: Imposible", "Jack Reacher", "Kingsman"], answer: 1 },
+        { text: "¿Qué actor interpretó a Oppenheimer en la película de 2023?", options: ["Cillian Murphy", "Matt Damon", "Benedict Cumberbatch", "Adam Driver"], answer: 0 }
       ]
     };
 
@@ -991,8 +783,15 @@
     let current = "X";
     const selectedCategories = new Set(["historia"]);
     let questionOpen = false;
+    let feedbackOpen = false;
     let pendingMoveIndex = null;
+    let pendingAnswerResolution = null;
     let activeQuestion = null;
+    let questionTimerId = null;
+    let questionTimeLeft = 15;
+    const QUESTION_TIME_LIMIT = 15;
+    let roundNumber = 0;
+    let currentDifficulty = "medio";
 
     function syncNames() {
       names.X = player1Input.value.trim() || "Jugador 1";
@@ -1017,7 +816,7 @@
     function render() {
       cells.forEach((cell, index) => {
         cell.textContent = board[index];
-        cell.disabled = !active || board[index] !== "" || questionOpen;
+        cell.disabled = !active || board[index] !== "" || questionOpen || feedbackOpen;
       });
     }
     function toggleCategory(category) {
@@ -1053,25 +852,64 @@
       baseCategories.forEach((category) => usedQuestions[category].clear());
     }
 
+    function getQuestionLevelByIndex(index, totalQuestions) {
+      const mediumLimit = Math.ceil(totalQuestions / 3);
+      const hardLimit = Math.ceil((totalQuestions * 2) / 3);
+      if (index < mediumLimit) return "medio";
+      if (index < hardLimit) return "dificil";
+      return "experto";
+    }
+
+    function updateDifficultyUI() {
+      difficultyLabel.textContent =
+        roundNumber > 0
+          ? `Nivel seleccionado: ${difficultyLabels[currentDifficulty]} · Ronda ${roundNumber}`
+          : `Nivel seleccionado: ${difficultyLabels[currentDifficulty]}`;
+      difficultyButtons.forEach((button) => {
+        button.classList.toggle("selected", button.dataset.difficulty === currentDifficulty);
+      });
+    }
+
     function getQuestionCategories() {
       return selectedCategories.has("random") ? baseCategories : Array.from(selectedCategories);
     }
     function hasAvailableQuestions() {
       const categories = getQuestionCategories();
-      return categories.some((category) => usedQuestions[category].size < questionBank[category].length);
+      return categories.some((category) =>
+        questionBank[category].some(
+          (_, index) =>
+            getQuestionLevelByIndex(index, questionBank[category].length) === currentDifficulty
+        )
+      );
     }
 
     function getRandomQuestion() {
       const categories = getQuestionCategories();
-      let candidates = [];
-
-      categories.forEach((category) => {
-        questionBank[category].forEach((question, index) => {
-          if (!usedQuestions[category].has(index)) {
-            candidates.push({ ...question, category, index });
-          }
+      const buildCandidates = () => {
+        const candidates = [];
+        categories.forEach((category) => {
+          questionBank[category].forEach((question, index) => {
+            const questionLevel = getQuestionLevelByIndex(index, questionBank[category].length);
+            if (!usedQuestions[category].has(index) && questionLevel === currentDifficulty) {
+              candidates.push({ ...question, category, index, level: questionLevel });
+            }
+          });
         });
-      });
+        return candidates;
+      };
+
+      let candidates = buildCandidates();
+
+      if (candidates.length === 0) {
+        categories.forEach((category) => {
+          questionBank[category].forEach((_, index) => {
+            if (getQuestionLevelByIndex(index, questionBank[category].length) === currentDifficulty) {
+              usedQuestions[category].delete(index);
+            }
+          });
+        });
+        candidates = buildCandidates();
+      }
 
       if (candidates.length === 0) return null;
 
@@ -1080,12 +918,85 @@
       usedQuestions[chosen.category].add(chosen.index);
       return chosen;
     }
+    function updateQuestionTimerDisplay() {
+      questionTimerEl.textContent = `Tiempo: ${questionTimeLeft}s`;
+    }
+
+    function stopQuestionTimer(resetTime = true) {
+      if (questionTimerId) {
+        clearInterval(questionTimerId);
+        questionTimerId = null;
+      }
+      if (resetTime) {
+        questionTimeLeft = QUESTION_TIME_LIMIT;
+        updateQuestionTimerDisplay();
+      }
+    }
+
+    function startQuestionTimer() {
+      stopQuestionTimer(false);
+      questionTimeLeft = QUESTION_TIME_LIMIT;
+      updateQuestionTimerDisplay();
+
+      questionTimerId = setInterval(() => {
+        questionTimeLeft -= 1;
+        updateQuestionTimerDisplay();
+        if (questionTimeLeft <= 0) {
+          stopQuestionTimer(false);
+          handleAnswer(-1);
+        }
+      }, 1000);
+    }
 
     function hideQuestionOverlay() {
+      stopQuestionTimer();
       questionOverlay.classList.remove("active");
       questionOpen = false;
       activeQuestion = null;
       optionsContainer.innerHTML = "";
+    }
+
+    function showAnswerFeedback(isCorrect, wasTimeout = false) {
+      feedbackOpen = true;
+      answerCard.classList.remove("correct", "wrong");
+      if (isCorrect) {
+        answerCard.classList.add("correct");
+        answerText.textContent = "¡Correcto!";
+      } else {
+        answerCard.classList.add("wrong");
+        answerText.textContent = wasTimeout ? "¡Tiempo agotado! Incorrecto." : "¡Incorrecto!";
+      }
+      answerFeedback.classList.add("active");
+      render();
+    }
+
+    function hideAnswerFeedback() {
+      answerFeedback.classList.remove("active");
+      answerCard.classList.remove("correct", "wrong");
+      feedbackOpen = false;
+      answerText.textContent = "";
+    }
+
+    function continueAfterAnswerFeedback() {
+      if (!pendingAnswerResolution) {
+        hideAnswerFeedback();
+        render();
+        return;
+      }
+
+      const { isCorrect, moveIndex } = pendingAnswerResolution;
+      pendingAnswerResolution = null;
+      hideAnswerFeedback();
+
+      if (!active) {
+        render();
+        return;
+      }
+      if (isCorrect) {
+        resolveCorrectAnswer(moveIndex);
+      } else {
+        resolveWrongAnswer();
+      }
     }
 
     function showQuestionForCell(index) {
@@ -1094,13 +1005,14 @@
       if (!activeQuestion) {
         pendingMoveIndex = null;
         active = false;
-        setStatus("No quedan preguntas disponibles. Pulsa Nuevo juego.");
+        setStatus("No hay preguntas para esta dificultad en las categorías elegidas.");
         render();
         return;
       }
       questionOpen = true;
 
       questionCategoryEl.textContent = `Categoría: ${categoryLabels[activeQuestion.category]}`;
+      questionDifficultyEl.textContent = `Nivel: ${difficultyLabels[activeQuestion.level]}`;
       questionTextEl.textContent = activeQuestion.text;
       optionsContainer.innerHTML = "";
 
@@ -1114,6 +1026,7 @@
       });
 
       questionOverlay.classList.add("active");
+      startQuestionTimer();
       setStatus(`Pregunta para ${names[current]} (${current})`);
       render();
     }
@@ -1151,27 +1064,30 @@
 
       const moveIndex = pendingMoveIndex;
       const isCorrect = optionIndex === activeQuestion.answer;
+      const wasTimeout = optionIndex === -1;
 
       pendingMoveIndex = null;
       hideQuestionOverlay();
 
       if (!active) return;
-      if (isCorrect) {
-        resolveCorrectAnswer(moveIndex);
-      } else {
-        resolveWrongAnswer();
-      }
+      pendingAnswerResolution = { isCorrect, moveIndex };
+      showAnswerFeedback(isCorrect, wasTimeout);
+      setStatus("Pulsa Continuar para seguir");
     }
 
     function beginRound() {
       syncNames();
+      roundNumber += 1;
+      updateDifficultyUI();
       board = Array(9).fill("");
       clearWinMarks();
       pendingMoveIndex = null;
+      pendingAnswerResolution = null;
       hideQuestionOverlay();
+      hideAnswerFeedback();
       if (!hasAvailableQuestions()) {
         active = false;
-        setStatus("No quedan preguntas disponibles. Pulsa Nuevo juego.");
+        setStatus("No hay preguntas para esta dificultad en las categorías elegidas.");
         render();
         return;
       }
@@ -1188,7 +1104,7 @@
     }
 
     function onCellClick(index) {
-      if (!active || board[index] || questionOpen) return;
+      if (!active || board[index] || questionOpen || feedbackOpen) return;
       showQuestionForCell(index);
     }
 
@@ -1200,10 +1116,17 @@
     categoryButtons.forEach((button) => {
       button.addEventListener("click", () => toggleCategory(button.dataset.category));
     });
+    difficultyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentDifficulty = button.dataset.difficulty;
+        updateDifficultyUI();
+      });
+    });
 
     cells.forEach((cell, index) => {
       cell.addEventListener("click", () => onCellClick(index));
     });
+    answerContinueBtn.addEventListener("click", continueAfterAnswerFeedback);
 
     player1Input.addEventListener("input", syncNames);
     player2Input.addEventListener("input", syncNames);
@@ -1218,17 +1141,22 @@
       board = Array(9).fill("");
       clearWinMarks();
       pendingMoveIndex = null;
+      pendingAnswerResolution = null;
       hideQuestionOverlay();
+      hideAnswerFeedback();
       active = false;
       setStatus("Pulsa Iniciar");
       render();
       gameScreen.classList.remove("active");
       menuScreen.classList.add("active");
+      roundNumber = 0;
+      updateDifficultyUI();
     });
     updateSelectedCategoriesUI();
 
     syncNames();
     updateScores();
+    updateDifficultyUI();
     render();
   </script>
 </body>

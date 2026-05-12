@@ -48,38 +48,32 @@
 }
 
 .welcome-content h1{
-    font-size: clamp(38px, 9vw, 72px);
-    line-height: 1.1;
-    margin-bottom: 18px;
+    font-size:clamp(34px,10vw,64px);
+    line-height:1.1;
+    margin-bottom:16px;
 }
 
 .welcome-content p{
-    font-size: clamp(16px, 4.5vw, 24px);
-    line-height: 1.5;
-
-    margin-bottom: 28px;
+    font-size:clamp(16px,4.8vw,22px);
+    line-height:1.5;
+    margin-bottom:24px;
 }
 
 .welcome-content button{
-    width: 100%;
-    max-width: 320px;
+    width:100%;
+    padding:16px;
 
-    padding: 16px 20px;
+    border:none;
+    border-radius:16px;
 
-    font-size: clamp(18px, 5vw, 24px);
+    font-size:22px;
+    font-weight:bold;
 
-    border: none;
-    border-radius: 16px;
+    color:white;
 
-    cursor: pointer;
+    background:linear-gradient(45deg,#6a00ff,#00c3ff);
 
-    background: linear-gradient(45deg,#6a00ff,#00c3ff);
-
-    color: white;
-
-    font-weight: bold;
-
-    transition: transform 0.2s ease;
+    cursor:pointer;
 }
 
 .welcome-content button:active{
@@ -106,19 +100,28 @@
     /* PANTALLA BIENVENIDA */
 
 #welcome-screen{
-    width: 100%;
-    height: 100vh;
+    position:fixed;
+    inset:0;
+
+    width:100%;
+    height:100dvh;
+
+    padding:20px;
 
     background:
-    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
+    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.75)),
     url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1974&auto=format&fit=crop");
 
-    background-size: cover;
-    background-position: center;
+    background-size:cover;
+    background-position:center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    z-index:9999;
 }
 
 .welcome-content{
@@ -181,16 +184,26 @@
     * {
       box-sizing: border-box;
     }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #dcdcdc;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text);
-      display: grid;
-      place-items: center;
-      padding: 14px;
-    }
+    body{
+    margin:0;
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+
+    background:#000;
+
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+
+    overflow-x:hidden;
+}
+.phone{
+    display:none;
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+
+    margin:0;
+}
     .phone {
       position: relative;
       width: min(100%, 420px);
@@ -719,7 +732,6 @@ body {
     document.getElementById("welcome-screen").style.display = "none";
 
     document.querySelector(".phone").style.display = "block";
-
 }
     const menuScreen = document.getElementById("menuScreen");
     const gameScreen = document.getElementById("gameScreen");

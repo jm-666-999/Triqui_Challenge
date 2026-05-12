@@ -1,10 +1,56 @@
 <!doctype html>
 <html lang="es">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Triqui Challenge</title>
   <style>
+    /* RESPONSIVE PARA CELULAR */
+
+@media screen and (max-width: 768px){
+
+    #welcome-screen{
+        padding: 20px;
+    }
+
+    .welcome-content{
+
+        width: 95%;
+
+        padding: 30px 20px;
+
+        border-radius: 20px;
+    }
+
+    .welcome-content h1{
+
+        font-size: 42px;
+
+        line-height: 1.2;
+    }
+
+    .welcome-content p{
+
+        font-size: 18px;
+
+        line-height: 1.5;
+
+        margin-bottom: 25px;
+    }
+
+    .welcome-content button{
+
+        width: 100%;
+
+        padding: 16px;
+
+        font-size: 22px;
+
+        border-radius: 14px;
+    }
+
+}
     /* PANTALLA BIENVENIDA */
 
 #welcome-screen{
@@ -509,8 +555,6 @@ body {
         </button>
     </div>
 </div>
-
-<div id="main-screen">
   <main class="phone">
     <div class="topbar"></div>
     <section id="menuScreen" class="screen active">
@@ -564,7 +608,6 @@ body {
       </div>
     </div>
   </div>
-</div>
     </section>
     <section id="gameScreen" class="screen">
       <div class="panel">

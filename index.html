@@ -6,50 +6,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Triqui Challenge</title>
   <style>
-    /* RESPONSIVE PARA CELULAR */
+.phone{
+    display: none;
+}
+#welcome-screen{
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
 
-@media screen and (max-width: 768px){
+    padding: 20px;
 
-    #welcome-screen{
-        padding: 20px;
-    }
+    background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)),
+    url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1974&auto=format&fit=crop");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-content{
+    width: 100%;
+    max-width: 650px;
+
+    text-align: center;
+    color: white;
+
+    background: rgba(0,0,0,0.45);
+
+    padding: 40px 25px;
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.welcome-content h1{
+    font-size: clamp(38px, 9vw, 72px);
+    line-height: 1.1;
+    margin-bottom: 18px;
+}
+
+.welcome-content p{
+    font-size: clamp(16px, 4.5vw, 24px);
+    line-height: 1.5;
+
+    margin-bottom: 28px;
+}
+
+.welcome-content button{
+    width: 100%;
+    max-width: 320px;
+
+    padding: 16px 20px;
+
+    font-size: clamp(18px, 5vw, 24px);
+
+    border: none;
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    background: linear-gradient(45deg,#6a00ff,#00c3ff);
+
+    color: white;
+
+    font-weight: bold;
+
+    transition: transform 0.2s ease;
+}
+
+.welcome-content button:active{
+    transform: scale(0.97);
+}
+
+/* CELULARES PEQUEÑOS */
+
+@media (max-width: 480px){
 
     .welcome-content{
-
-        width: 95%;
-
-        padding: 30px 20px;
-
+        padding: 30px 18px;
         border-radius: 20px;
     }
 
     .welcome-content h1{
-
-        font-size: 42px;
-
-        line-height: 1.2;
+        margin-bottom: 14px;
     }
 
     .welcome-content p{
-
-        font-size: 18px;
-
-        line-height: 1.5;
-
-        margin-bottom: 25px;
+        margin-bottom: 22px;
     }
-
-    .welcome-content button{
-
-        width: 100%;
-
-        padding: 16px;
-
-        font-size: 22px;
-
-        border-radius: 14px;
-    }
-
 }
     /* PANTALLA BIENVENIDA */
 
@@ -536,7 +588,6 @@ body {
   </style>
 </head>
 <body>
-  <body>
 
 <!-- PANTALLA DE BIENVENIDA -->
 <div id="welcome-screen">
@@ -667,7 +718,7 @@ body {
 
     document.getElementById("welcome-screen").style.display = "none";
 
-    document.getElementById("main-screen").style.display = "block";
+    document.querySelector(".phone").style.display = "block";
 
 }
     const menuScreen = document.getElementById("menuScreen");

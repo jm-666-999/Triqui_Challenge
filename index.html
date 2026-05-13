@@ -1,178 +1,106 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Triqui Challenge</title>
   <style>
-.phone{
-    display: none;
-}
-#welcome-screen{
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
+    /* ===== HOME SCREEN ===== */
 
-    padding: 20px;
-
-    background:
-    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)),
-    url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1974&auto=format&fit=crop");
-
-    background-size: cover;
-    background-position: center;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#homeScreen {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #58b6ff 0%,
+    #4d7cff 100%
+  );
 }
 
-.welcome-content{
-    width: 100%;
-    max-width: 650px;
+/* SOLO cuando esté activa */
 
-    text-align: center;
-    color: white;
-
-    background: rgba(0,0,0,0.45);
-
-    padding: 40px 25px;
-
-    border-radius: 24px;
-
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+#homeScreen.active {
+  display: flex;
 }
 
-.welcome-content h1{
-    font-size:clamp(34px,10vw,64px);
-    line-height:1.1;
-    margin-bottom:16px;
+.home-container {
+  width: 100%;
+  padding: 30px;
+  text-align: center;
 }
 
-.welcome-content p{
-    font-size:clamp(16px,4.8vw,22px);
-    line-height:1.5;
-    margin-bottom:24px;
+.logo-area {
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
-.welcome-content button{
-    width:100%;
-    padding:16px;
-
-    border:none;
-    border-radius:16px;
-
-    font-size:22px;
-    font-weight:bold;
-
-    color:white;
-
-    background:linear-gradient(45deg,#6a00ff,#00c3ff);
-
-    cursor:pointer;
+.game-title {
+  font-size: clamp(42px, 10vw, 72px);
+  line-height: 0.95;
+  margin: 0;
+  color: white;
+  text-shadow:
+    3px 3px 0 #1738b6,
+    6px 6px 0 #0b1f6d;
+  animation: floatTitle 2s ease-in-out infinite;
 }
 
-.welcome-content button:active{
-    transform: scale(0.97);
+.game-subtitle {
+  font-size: 20px;
+  color: white;
+  margin-top: 18px;
+  font-weight: 600;
 }
 
-/* CELULARES PEQUEÑOS */
-
-@media (max-width: 480px){
-
-    .welcome-content{
-        padding: 30px 18px;
-        border-radius: 20px;
-    }
-
-    .welcome-content h1{
-        margin-bottom: 14px;
-    }
-
-    .welcome-content p{
-        margin-bottom: 22px;
-    }
-}
-    /* PANTALLA BIENVENIDA */
-
-#welcome-screen{
-    position:fixed;
-    inset:0;
-
-    width:100%;
-    height:100dvh;
-
-    padding:20px;
-
-    background:
-    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.75)),
-    url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1974&auto=format&fit=crop");
-
-    background-size:cover;
-    background-position:center;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    overflow:hidden;
-
-    z-index:9999;
+.home-buttons {
+  display: grid;
+  gap: 16px;
+  margin-top: 30px;
 }
 
-.welcome-content{
-    text-align: center;
-    color: white;
-
-    background: rgba(0,0,0,0.4);
-
-    padding: 50px;
-    border-radius: 25px;
-
-    backdrop-filter: blur(10px);
-
-    width: 80%;
-    max-width: 700px;
+.home-btn {
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  background: white;
+  color: #1738b6;
+  transition: 0.2s;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2);
 }
 
-.welcome-content h1{
-    font-size: 70px;
-    margin-bottom: 20px;
+.home-btn:hover {
+  transform: translateY(-3px);
 }
 
-.welcome-content p{
-    font-size: 24px;
-    margin-bottom: 35px;
+.primary-btn {
+  background: #39db53;
+  color: white;
 }
 
-.welcome-content button{
-    padding: 18px 40px;
-    font-size: 24px;
-
-    border: none;
-    border-radius: 15px;
-
-    cursor: pointer;
-
-    background: linear-gradient(45deg,#6a00ff,#00c3ff);
-
-    color: white;
-
-    transition: 0.3s;
+.home-footer {
+  margin-top: 60px;
+  color: white;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-.welcome-content button:hover{
-    transform: scale(1.1);
-}
+@keyframes floatTitle {
+  0% {
+    transform: translateY(0px);
+  }
 
-/* JUEGO */
+  50% {
+    transform: translateY(-8px);
+  }
 
-#main-screen{
-    display: none;
+  100% {
+    transform: translateY(0px);
+  }
 }
     :root {
       --bg: #95d7d7;
@@ -184,26 +112,16 @@
     * {
       box-sizing: border-box;
     }
-    body{
-    margin:0;
-    width:100%;
-    min-height:100vh;
-    min-height:100dvh;
-
-    background:#000;
-
-    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
-
-    overflow-x:hidden;
-}
-.phone{
-    display:none;
-    width:100%;
-    min-height:100vh;
-    min-height:100dvh;
-
-    margin:0;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #dcdcdc;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 14px;
+    }
     .phone {
       position: relative;
       width: min(100%, 420px);
@@ -601,28 +519,88 @@ body {
   </style>
 </head>
 <body>
-
-<!-- PANTALLA DE BIENVENIDA -->
-<div id="welcome-screen">
-
-    <div class="welcome-content">
-
-        <h1>¡BIENVENIDOS!</h1>
-
-        <p>
-            Prepárate para poner a prueba tus conocimientos
-            y divertirte al máximo.
-        </p>
-
-        <button onclick="startGame()">
-            ¡COMENZAR!
-        </button>
-    </div>
-</div>
+  <audio id="bgMusic" loop>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
   <main class="phone">
     <div class="topbar"></div>
-    <section id="menuScreen" class="screen active">
+<!-- PANTALLA DE INICIO -->
+<section id="homeScreen" class="screen active">
+  <div class="home-container">
+
+    <div class="logo-area">
+      <h1 class="game-title">TRIQUI<br>CHALLENGE</h1>
+      <p class="game-subtitle">Reta tu conocimiento</p>
+    </div>
+
+    <div class="home-buttons">
+      <button id="playBtn" class="home-btn primary-btn">
+        ▶ JUGAR
+      </button>
+      <button id="configBtn" class="home-btn">
+        ⚙ CONFIGURACIÓN
+      </button>
+    </div>
+    <div class="home-footer">
+      <p>Versión 1.0</p>
+    </div>
+
+  </div>
+</section>
+<!-- PANTALLA CONFIGURACIÓN -->
+<section id="configScreen" class="screen">
+
   <div class="panel">
+
+    <h2 style="text-align:center;">⚙ Configuración</h2>
+
+    <div style="margin-top:25px;">
+
+      <label>🔊 Sonido</label>
+
+      <input 
+        type="range"
+        id="soundVolume"
+        min="0"
+        max="100"
+        value="100"
+        style="width:100%;"
+      >
+
+      <p id="soundValue">100%</p>
+
+    </div>
+
+    <div style="margin-top:25px;">
+
+      <label>🎵 Música</label>
+
+      <input 
+        type="range"
+        id="musicVolume"
+        min="0"
+        max="100"
+        value="100"
+        style="width:100%;"
+      >
+
+      <p id="musicValue">100%</p>
+
+    </div>
+
+    <button 
+      id="backBtn"
+      class="main-btn"
+      style="margin-top:30px;"
+    >
+      Volver
+    </button>
+
+  </div>
+
+</section>
+    <section id="menuScreen" class="screen">
+<div class="panel">
   <div class="form-row">
     <label for="player1">Jugador 1</label>
     <input 
@@ -642,7 +620,7 @@ body {
       maxlength="12"
     />
   </div>
-  </div>
+</div>
         <div class="score-panel">
           <div class="score-box">
             <div id="scoreNameX" class="score-name">Jugador 1 (X)</div>
@@ -653,6 +631,7 @@ body {
             <div id="scoreO" class="score-value">0</div>
           </div>
         </div>
+      </div>
       <div class="panel">
         <div class="menu-grid">
           <div class="menu-col">
@@ -670,8 +649,6 @@ body {
       <div class="panel" style="text-align: center;">
         <button id="continueBtn" class="main-btn">Continuar</button>
       </div>
-    </div>
-  </div>
     </section>
     <section id="gameScreen" class="screen">
       <div class="panel">
@@ -726,13 +703,97 @@ body {
       </div>
     </div>
   </main>
+
   <script>
-    function startGame(){
+const configBtn = document.getElementById("configBtn");
+const configScreen = document.getElementById("configScreen");
+const backBtn = document.getElementById("backBtn");
 
-    document.getElementById("welcome-screen").style.display = "none";
+const soundVolume = document.getElementById("soundVolume");
+const musicVolume = document.getElementById("musicVolume");
 
-    document.querySelector(".phone").style.display = "block";
+const soundValue = document.getElementById("soundValue");
+const musicValue = document.getElementById("musicValue");
+
+// ABRIR CONFIGURACIÓN
+configBtn.addEventListener("click", () => {
+
+  homeScreen.classList.remove("active");
+  configScreen.classList.add("active");
+
+});
+
+
+// VOLVER
+backBtn.addEventListener("click", () => {
+
+  configScreen.classList.remove("active");
+  homeScreen.classList.add("active");
+
+});
+
+
+// MOSTRAR VALOR SONIDO
+soundVolume.addEventListener("input", () => {
+
+  soundValue.textContent = soundVolume.value + "%";
+
+});
+
+
+// MOSTRAR VALOR MÚSICA
+musicVolume.addEventListener("input", () => {
+
+  musicValue.textContent = musicVolume.value + "%";
+
+});
+
+   const homeScreen = document.getElementById("homeScreen");
+const playBtn = document.getElementById("playBtn");
+// VOLUMEN INICIAL
+bgMusic.volume = musicVolume.value / 100;
+
+
+// CAMBIAR VOLUMEN DE LA MÚSICA
+musicVolume.addEventListener("input", () => {
+
+  musicValue.textContent = musicVolume.value + "%";
+
+  bgMusic.volume = musicVolume.value / 100;
+
+});
+
+// iniciar música automáticamente
+document.addEventListener("click", () => {
+
+  bgMusic.play();
+
+});
+
+function volverInicio() {
+
+  configScreen.classList.remove("active");
+  homeScreen.classList.add("active");
+
 }
+configBtn.addEventListener("click", () => {
+
+  homeScreen.classList.remove("active");
+
+  // mostrar otra pantalla
+  document.getElementById("configScreen").classList.add("active");
+
+});
+
+playBtn.addEventListener("click", () => {
+
+  // Oculta portada
+  homeScreen.classList.remove("active");
+
+  // Muestra pantalla de categorías
+  menuScreen.classList.add("active");
+
+});
     const menuScreen = document.getElementById("menuScreen");
     const gameScreen = document.getElementById("gameScreen");
     const continueBtn = document.getElementById("continueBtn");
@@ -795,136 +856,34 @@ body {
     const questionBank = {
             historia: [
 
+// NIVEL MEDIO (20 preguntas)
+
 {
   difficulty: "medio",
-  text: "¿Qué tratado (1648) suele considerarse el origen del sistema moderno de Estados soberanos?",
-  options: ["Tratado de Utrecht", "Paz de Westfalia", "Congreso de Viena", "Tratado de Tordesillas"],
-  answer: 1
+  text: "¿Quién descubrió América en 1492?",
+  options: ["Cristóbal Colón", "Fernando Magallanes", "Napoleón", "Julio César"],
+  answer: 0
 },
+
 {
   difficulty: "medio",
-  text: "¿Qué civilización construyó las pirámides de Egipto?",
-  options: ["Romanos", "Griegos", "Egipcios", "Persas"],
+  text: "¿En qué país se originaron los Juegos Olímpicos?",
+  options: ["Italia", "Egipto", "Grecia", "China"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Quién descubrió América en 1492 según la historia tradicional?",
-  options: ["Cristóbal Colón", "Fernando de Magallanes", "Américo Vespucio", "Hernán Cortés"],
-  answer: 0
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué muro cayó en 1989 marcando el fin de la Guerra Fría?",
-  options: ["Muro de Berlín", "Gran Muralla China", "Muro de Adriano", "Muro de Varsovia"],
-  answer: 0
+  text: "¿Qué civilización construyó las pirámides de Giza?",
+  options: ["Romanos", "Egipcios", "Mayas", "Aztecas"],
+  answer: 1
 },
 
 {
   difficulty: "medio",
   text: "¿Quién fue el primer emperador de Roma?",
-  options: ["Julio César", "Augusto", "Nerón", "Trajano"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué conflicto ocurrió entre 1914 y 1918?",
-  options: ["Segunda Guerra Mundial", "Guerra Fría", "Primera Guerra Mundial", "Guerra Civil Española"],
+  options: ["Nerón", "Julio César", "Augusto", "Trajano"],
   answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué barco famoso se hundió en 1912?",
-  options: ["Britannic", "Titanic", "Santa María", "Victory"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país construyó el Coliseo Romano?",
-  options: ["Grecia", "Egipto", "Italia", "Roma"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿Quién lideró la independencia de la India usando resistencia pacífica?",
-  options: ["Nelson Mandela", "Mahatma Gandhi", "Jawaharlal Nehru", "Lenin"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué civilización habitó principalmente México antes de la llegada española?",
-  options: ["Incas", "Mayas", "Aztecas", "Olmecas"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿En qué continente surgió la civilización egipcia?",
-  options: ["Europa", "Asia", "África", "Oceanía"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué conflicto enfrentó al norte y al sur de Estados Unidos?",
-  options: ["Primera Guerra Mundial", "Guerra Civil Estadounidense", "Guerra Fría", "Guerra de Vietnam"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué imperio fue gobernado por Julio César?",
-  options: ["Imperio Otomano", "Imperio Romano", "Imperio Bizantino", "Imperio Mongol"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país fue gobernado por los faraones?",
-  options: ["Grecia", "Persia", "Egipto", "India"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué emperador bizantino ordenó la compilación del Corpus Iuris Civilis?",
-  options: ["Teodosio I", "Justiniano I", "Heraclio", "Basilio II"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿En qué batalla naval de 1571 fue frenada la expansión otomana en el Mediterráneo occidental?",
-  options: ["Navarino", "Lepanto", "Accio", "Trafalgar"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué dinastía china gobernaba cuando Marco Polo habría llegado a la corte de Kublai Kan?",
-  options: ["Ming", "Qing", "Yuan", "Song"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuál fue la principal consecuencia geopolítica del Tratado de Tordesillas (1494)?",
-  options: ["Fin de la Reconquista", "Reparto de zonas de expansión atlántica entre Castilla y Portugal", "Independencia de Brasil", "Creación de la Liga Hanseática"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué reforma impulsó Clístenes en Atenas hacia 508 a.C.?",
-  options: ["Monarquía hereditaria", "Democracia basada en demos y consejo", "Tiranía militar", "Sistema feudal"],
-  answer: 1
 },
 
 {
@@ -935,6 +894,114 @@ body {
 },
 
 {
+  difficulty: "medio",
+  text: "¿Qué muro cayó en 1989 simbolizando el fin de la Guerra Fría?",
+  options: ["Muro de Roma", "Muro de Berlín", "Muro de China", "Muro de Varsovia"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Quién lideró la independencia de Argentina, Chile y Perú?",
+  options: ["Simón Bolívar", "José de San Martín", "Miguel Hidalgo", "Pancho Villa"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué continente fue conocido como el “Nuevo Mundo”?",
+  options: ["Asia", "África", "Europa", "América"],
+  answer: 3
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cuál fue la capital del Imperio Inca?",
+  options: ["Machu Picchu", "Quito", "Cusco", "Lima"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué revolución comenzó en Francia en 1789?",
+  options: ["Revolución Industrial", "Revolución Francesa", "Revolución Rusa", "Revolución Gloriosa"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Quién escribió la Declaración de Independencia de Estados Unidos?",
+  options: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "Benjamin Franklin"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué civilización creó un calendario muy avanzado en Mesoamérica?",
+  options: ["Mayas", "Vikingos", "Fenicios", "Persas"],
+  answer: 0
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué imperio era gobernado por los zares?",
+  options: ["Imperio Romano", "Imperio Otomano", "Imperio Ruso", "Imperio Mongol"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Quién fue conocido como el Libertador de América?",
+  options: ["Napoleón", "Simón Bolívar", "San Martín", "Sucre"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué conflicto ocurrió entre 1914 y 1918?",
+  options: ["Segunda Guerra Mundial", "Guerra Fría", "Primera Guerra Mundial", "Guerra de Corea"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué país lanzó las bombas atómicas sobre Hiroshima y Nagasaki?",
+  options: ["Alemania", "Reino Unido", "Estados Unidos", "Francia"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué navegante dio la primera vuelta al mundo?",
+  options: ["Cristóbal Colón", "Fernando Magallanes", "Marco Polo", "Vasco da Gama"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué pueblo invadió gran parte de Europa dirigido por Atila?",
+  options: ["Vikingos", "Hunos", "Francos", "Visigodos"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿En qué ciudad italiana surgió el Renacimiento?",
+  options: ["Roma", "Venecia", "Florencia", "Milán"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué organización internacional se creó después de la Segunda Guerra Mundial?",
+  options: ["OTAN", "ONU", "Unión Europea", "OEA"],
+  answer: 1
+},
+
+
+// NIVEL DIFICIL (20 preguntas)
+
+{
   difficulty: "dificil",
   text: "¿Cuál fue el detonante inmediato de la Guerra de Crimea (1853)?",
   options: ["Crisis de Marruecos", "Disputa por lugares santos y expansión rusa sobre territorios otomanos", "Asesinato en Sarajevo", "Bloqueo continental napoleónico"],
@@ -943,43 +1010,30 @@ body {
 
 {
   difficulty: "dificil",
-  text: "¿Qué líder encabezó la Restauración Meiji en Japón?",
-  options: ["Tokugawa Ieyasu", "Emperador Mutsuhito", "Minamoto no Yoritomo", "Toyotomi Hideyoshi"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál fue la capital del Imperio inca?",
-  options: ["Quito", "Cuzco", "Tiahuanaco", "Chan Chan"],
-  answer: 1
-},
-{
-  difficulty: "dificil",
-  text: "¿Qué emperador bizantino ordenó la compilación del Corpus Iuris Civilis?",
-  options: ["Teodosio I", "Justiniano I", "Heraclio", "Constantino XI"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué batalla naval de 1571 frenó la expansión otomana en el Mediterráneo?",
-  options: ["Trafalgar", "Accio", "Lepanto", "Salamina"],
+  text: "¿Qué tratado puso fin a la Primera Guerra Mundial?",
+  options: ["Tratado de París", "Tratado de Tordesillas", "Tratado de Versalles", "Tratado de Utrecht"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué dinastía gobernaba China durante los viajes de Marco Polo?",
-  options: ["Ming", "Song", "Qing", "Yuan"],
-  answer: 3
+  text: "¿Qué sistema económico defendía Adam Smith?",
+  options: ["Mercantilismo", "Comunismo", "Capitalismo liberal", "Feudalismo"],
+  answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué tratado puso fin oficialmente a la Primera Guerra Mundial?",
-  options: ["Versalles", "Westfalia", "Utrecht", "París"],
-  answer: 0
+  text: "¿Qué emperador francés fue derrotado en Waterloo?",
+  options: ["Luis XIV", "Napoleón Bonaparte", "Carlos Magno", "Napoleón III"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué evento marcó el inicio de la Primera Guerra Mundial?",
+  options: ["Invasión de Polonia", "Caída de Constantinopla", "Asesinato del archiduque Francisco Fernando", "Revolución Rusa"],
+  answer: 2
 },
 
 {
@@ -991,87 +1045,104 @@ body {
 
 {
   difficulty: "dificil",
-  text: "¿Qué ciudad fue destruida por la erupción del Vesubio en el año 79?",
-  options: ["Atenas", "Pompeya", "Esparta", "Cartago"],
+  text: "¿Qué país fue dividido en Norte y Sur tras la Segunda Guerra Mundial?",
+  options: ["Vietnam", "Corea", "Alemania", "China"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué civilización construyó Machu Picchu?",
-  options: ["Maya", "Azteca", "Inca", "Olmeca"],
+  text: "¿Qué batalla frenó la expansión musulmana en Europa en 732?",
+  options: ["Poitiers", "Hastings", "Lepanto", "Austerlitz"],
+  answer: 0
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué doctrina justificaba el poder absoluto de los reyes?",
+  options: ["Humanismo", "Derecho divino", "Ilustración", "Nacionalismo"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué imperio cayó tras la toma de Constantinopla en 1453?",
+  options: ["Imperio Romano de Occidente", "Imperio Bizantino", "Imperio Persa", "Imperio Carolingio"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Quién lideró la Revolución Bolchevique de 1917?",
+  options: ["Trotski", "Lenin", "Stalin", "Kerenski"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué conferencia repartió África entre potencias europeas?",
+  options: ["Conferencia de Yalta", "Conferencia de Berlín", "Conferencia de Viena", "Conferencia de Potsdam"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué movimiento cultural europeo defendía la razón en el siglo XVIII?",
+  options: ["Romanticismo", "Humanismo", "Ilustración", "Barroco"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué conflicto histórico fue conocido como la Guerra de las Dos Rosas?",
-  options: ["Conflicto inglés entre Lancaster y York", "Guerra entre Francia y España", "Revolución rusa", "Guerra de independencia griega"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué faraón egipcio es famoso por su tumba descubierta casi intacta en 1922?",
-  options: ["Ramsés II", "Tutankamón", "Akenatón", "Keops"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué conferencia de 1945 reunió a Churchill, Roosevelt y Stalin?",
-  options: ["Yalta", "Potsdam", "Berlín", "Versalles"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué imperio tenía como capital Constantinopla?",
-  options: ["Persa", "Romano Occidental", "Bizantino", "Mongol"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Quién lideró la Revolución Cubana junto a Fidel Castro?",
-  options: ["Che Guevara", "Salvador Allende", "Hugo Chávez", "Augusto Pinochet"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué reforma religiosa inició Martín Lutero en el siglo XVI?",
-  options: ["Contrarreforma", "Reforma Protestante", "Renacimiento", "Ilustración"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué guerra enfrentó a Atenas y Esparta en la Antigua Grecia?",
+  text: "¿Qué guerra enfrentó a Atenas y Esparta?",
   options: ["Guerras Médicas", "Guerra del Peloponeso", "Guerra Púnica", "Guerra de Troya"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué acuerdo de 1978 sentó las bases de paz entre Egipto e Israel?",
-  options: ["Acuerdos de Oslo", "Camp David", "Tratado de Sèvres", "Acuerdos de Dayton"],
+  text: "¿Qué reforma religiosa inició Martín Lutero?",
+  options: ["Contrarreforma", "Reforma Protestante", "Reforma Anglicana", "Cisma de Oriente"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué evento de 1453 marcó el fin tradicional de la Edad Media para muchos historiadores?",
-  options: ["Caída de Granada", "Caída de Constantinopla", "Toma de Jerusalén", "Reforma protestante"],
-  answer: 1
+  text: "¿Qué país inició la Revolución Industrial?",
+  options: ["Francia", "Alemania", "Estados Unidos", "Reino Unido"],
+  answer: 3
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué institución eclesiástica impulsó la Contrarreforma en el siglo XVI junto al Concilio de Trento?",
-  options: ["Orden Teutónica", "Compañía de Jesús", "Cistercienses", "Caballeros Hospitalarios"],
+  text: "¿Qué líder chino impulsó la Revolución Cultural?",
+  options: ["Sun Yat-sen", "Chiang Kai-shek", "Mao Zedong", "Deng Xiaoping"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué civilización derrotó a los persas en las Guerras Médicas?",
+  options: ["Egipto", "Roma", "Grecia", "Cartago"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué tratado dividió el mundo entre España y Portugal?",
+  options: ["Tratado de Utrecht", "Tratado de Versalles", "Tratado de Tordesillas", "Tratado de París"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué líder independentista liberó gran parte del norte de Sudamérica?",
+  options: ["José Martí", "Simón Bolívar", "Sucre", "Artigas"],
   answer: 1
 },
+
+
+// NIVEL EXPERTO (20 preguntas)
 
 {
   difficulty: "experto",
@@ -1079,160 +1150,164 @@ body {
   options: ["Metternich", "Otto von Bismarck", "Guillermo II", "Hindenburg"],
   answer: 1
 },
+
 {
   difficulty: "experto",
-  text: "¿Qué conferencia de 1884-1885 reguló el reparto colonial de África entre potencias europeas?",
-  options: ["Conferencia de Viena", "Conferencia de Berlín", "Conferencia de Yalta", "Conferencia de París"],
+  text: "¿Qué historiador escribió 'La decadencia de Occidente'?",
+  options: ["Arnold Toynbee", "Oswald Spengler", "Heródoto", "Tucídides"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué rey francés fue conocido como el 'Rey Sol'?",
-  options: ["Luis XIV", "Luis XVI", "Felipe IV", "Carlos X"],
+  text: "¿Qué sistema político-económico describió Immanuel Wallerstein?",
+  options: ["Feudalismo", "Sistema-mundo", "Mercantilismo", "Socialismo científico"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué tratado puso fin a la Guerra de los Treinta Años en 1648?",
+  options: ["Westfalia", "Versalles", "Utrecht", "Tordesillas"],
   answer: 0
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué batalla de 1815 marcó la derrota definitiva de Napoleón Bonaparte?",
-  options: ["Austerlitz", "Sedán", "Waterloo", "Lepanto"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué revolución de 1911 puso fin a la dinastía Qing en China?",
-  options: ["Revolución Cultural", "Revolución Xinhai", "Rebelión Taiping", "Larga Marcha"],
+  text: "¿Qué escuela historiográfica francesa fundaron Marc Bloch y Lucien Febvre?",
+  options: ["Positivismo", "Escuela de Annales", "Historicismo", "Materialismo histórico"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Quién escribió la obra política 'El príncipe'?",
-  options: ["Montesquieu", "Maquiavelo", "Rousseau", "Voltaire"],
+  text: "¿Qué emperador bizantino compiló el Corpus Juris Civilis?",
+  options: ["Constantino", "Justiniano", "Heraclio", "Teodosio"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué civilización desarrolló la escritura cuneiforme?",
-  options: ["Egipcia", "Fenicia", "Sumeria", "Persa"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué tratado de 1648 puso fin a la Guerra de los Treinta Años?",
-  options: ["Tratado de Utrecht", "Paz de Westfalia", "Tratado de Versalles", "Tratado de París"],
+  text: "¿Qué concepto desarrolló Fernand Braudel sobre el tiempo histórico?",
+  options: ["Dialéctica histórica", "Larga duración", "Destino manifiesto", "Materialismo cultural"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué líder mongol creó el imperio contiguo más grande de la historia?",
-  options: ["Atila", "Tamerlán", "Gengis Kan", "Kublai Kan"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué emperador romano legalizó el cristianismo mediante el Edicto de Milán?",
-  options: ["Nerón", "Constantino", "Trajano", "Marco Aurelio"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué conflicto histórico enfrentó a Roma y Cartago?",
-  options: ["Guerras Médicas", "Guerras Púnicas", "Guerra del Peloponeso", "Guerra de Troya"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué líder dirigió la Unión Soviética durante gran parte de la Segunda Guerra Mundial?",
-  options: ["Lenin", "Stalin", "Trotski", "Kruschev"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué documento inglés de 1215 limitó el poder del rey?",
-  options: ["Bill of Rights", "Magna Carta", "Petition of Right", "Acta de Supremacía"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué dinastía gobernó Francia antes de la Revolución Francesa?",
-  options: ["Borbón", "Tudor", "Habsburgo", "Romanov"],
+  text: "¿Qué guerra consolidó la hegemonía británica en el siglo XVIII?",
+  options: ["Guerra de los Siete Años", "Guerra de Crimea", "Guerra Franco-Prusiana", "Guerra Boer"],
   answer: 0
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué batalla de 1815 puso fin definitivo al periodo napoleónico?",
-  options: ["Austerlitz", "Waterloo", "Borodinó", "Leipzig"],
+  text: "¿Qué emperador romano legalizó el cristianismo con el Edicto de Milán?",
+  options: ["Nerón", "Constantino", "Trajano", "Diocleciano"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál fue la primera civilización en desarrollar escritura cuneiforme?",
-  options: ["Egipcia", "Sumeria", "Hitita", "Fenicia"],
+  text: "¿Qué autor escribió 'El Príncipe'?",
+  options: ["Rousseau", "Maquiavelo", "Hobbes", "Locke"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué conferencia de 1884-1885 formalizó el reparto colonial de África entre potencias europeas?",
-  options: ["Viena", "Yalta", "Berlín", "Potsdam"],
+  text: "¿Qué batalla naval destruyó gran parte de la armada española en 1588?",
+  options: ["Lepanto", "Trafalgar", "Armada Invencible", "Jutlandia"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué reforma religiosa inglesa rompió con Roma bajo Enrique VIII?",
-  options: ["Acta de Uniformidad", "Acta de Supremacía", "Bill of Rights", "Edicto de Nantes"],
+  text: "¿Qué teoría económica formuló John Maynard Keynes?",
+  options: ["Liberalismo clásico", "Keynesianismo", "Mercantilismo", "Fisocracia"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué revolución de 1911 acabó con la dinastía Qing en China?",
-  options: ["Revolución Cultural", "Revolución Xinhai", "Larga Marcha", "Levantamiento Bóxer"],
+  text: "¿Qué imperio dominó Anatolia antes del ascenso otomano?",
+  options: ["Imperio Sasánida", "Imperio Bizantino", "Imperio Carolingio", "Imperio Mongol"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Quién escribió 'El príncipe', obra central del pensamiento político renacentista?",
-  options: ["Tomás Moro", "Nicolás Maquiavelo", "Erasmo de Róterdam", "Jean Bodin"],
+  text: "¿Qué conflicto enfrentó a católicos y protestantes en Francia durante el siglo XVI?",
+  options: ["Guerras Husitas", "Guerras de Religión", "Guerra de Sucesión", "Guerra Civil Inglesa"],
   answer: 1
-}
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué filósofo formuló el contrato social como legitimidad política?",
+  options: ["Platón", "Rousseau", "Aristóteles", "Voltaire"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país lideró la Contraarmada tras el fracaso de la Armada Invencible?",
+  options: ["Portugal", "Países Bajos", "Inglaterra", "Francia"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué acuerdo secreto dividió territorios otomanos entre Francia y Reino Unido en 1916?",
+  options: ["Acuerdo Sykes-Picot", "Tratado de Lausana", "Pacto Molotov-Ribbentrop", "Conferencia de Berlín"],
+  answer: 0
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué líder espartano comandó a los griegos en las Termópilas?",
+  options: ["Pericles", "Leónidas", "Filipo II", "Temístocles"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué economista escribió 'El Capital'?",
+  options: ["Adam Smith", "David Ricardo", "Karl Marx", "Engels"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué doctrina estadounidense buscó contener el comunismo tras la Segunda Guerra Mundial?",
+  options: ["Doctrina Monroe", "Doctrina Truman", "Destino manifiesto", "Política del Gran Garrote"],
+  answer: 1
+},
 
 ],
       deportes: [
 
+// NIVEL MEDIO (20 preguntas)
+
 {
   difficulty: "medio",
-  text: "¿Cuántos puntos otorga una conversión tras try en rugby union?",
-  options: ["1", "2", "3", "4"],
-  answer: 1
-},
-{
-  difficulty: "medio",
-  text: "¿Cuántos jugadores tiene un equipo de fútbol en cancha?",
+  text: "¿Cuántos jugadores tiene un equipo de fútbol en el campo?",
   options: ["9", "10", "11", "12"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué país ganó el Mundial de fútbol de 2018?",
-  options: ["Brasil", "Alemania", "Francia", "Argentina"],
+  text: "¿Qué país ganó el Mundial de Fútbol 2022?",
+  options: ["Brasil", "Francia", "Argentina", "Alemania"],
   answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿En qué deporte se utiliza una raqueta y una pelota amarilla?",
+  options: ["Béisbol", "Tenis", "Golf", "Hockey"],
+  answer: 1
 },
 
 {
@@ -1244,197 +1319,236 @@ body {
 
 {
   difficulty: "medio",
-  text: "¿Qué deporte practica Rafael Nadal?",
-  options: ["Golf", "Tenis", "Baloncesto", "Natación"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿En qué deporte se utiliza un puck?",
-  options: ["Béisbol", "Hockey", "Rugby", "Críquet"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuánto dura un partido de fútbol profesional sin tiempo extra?",
-  options: ["80 minutos", "90 minutos", "100 minutos", "120 minutos"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país es famoso por originar el judo?",
-  options: ["China", "Corea del Sur", "Japón", "Tailandia"],
+  text: "¿Qué deporte practica Lionel Messi?",
+  options: ["Tenis", "Baloncesto", "Fútbol", "Rugby"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué selección ganó el Mundial de Qatar 2022?",
-  options: ["Francia", "Brasil", "Argentina", "Croacia"],
+  text: "¿Qué país es famoso por inventar el judo?",
+  options: ["China", "Corea", "Japón", "Tailandia"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿En qué deporte compiten los equipos Lakers y Bulls?",
-  options: ["Béisbol", "Fútbol americano", "Baloncesto", "Hockey"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuántos sets debe ganar normalmente un tenista en un partido masculino de Grand Slam?",
-  options: ["2", "3", "4", "5"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país ganó más Copas Mundiales de fútbol masculino?",
-  options: ["Alemania", "Italia", "Argentina", "Brasil"],
+  text: "¿Cómo se llama el torneo de tenis más famoso sobre césped?",
+  options: ["Roland Garros", "US Open", "Australian Open", "Wimbledon"],
   answer: 3
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué deportista es conocido como 'La Pulga'?",
-  options: ["Cristiano Ronaldo", "Neymar", "Lionel Messi", "Mbappé"],
+  text: "¿En qué deporte se usa un bate y bases?",
+  options: ["Cricket", "Béisbol", "Golf", "Polo"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cuántos anillos olímpicos tiene la bandera olímpica?",
+  options: ["4", "5", "6", "7"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué selección ganó más Copas del Mundo hasta 2026?",
+  options: ["Argentina", "Italia", "Alemania", "Brasil"],
+  answer: 3
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué deporte practica Michael Jordan?",
+  options: ["Fútbol", "Baloncesto", "Béisbol", "Tenis"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cómo se llama el evento multideportivo más importante del mundo?",
+  options: ["Copa América", "Juegos Olímpicos", "Super Bowl", "Tour de Francia"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿En qué deporte se realiza un “knockout”?",
+  options: ["Natación", "Boxeo", "Atletismo", "Voleibol"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué color de tarjeta significa expulsión en fútbol?",
+  options: ["Azul", "Verde", "Roja", "Amarilla"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué deporte utiliza raqueta y volante?",
-  options: ["Tenis", "Ping pong", "Bádminton", "Squash"],
+  text: "¿Cuántos sets debe ganar normalmente un tenista en un partido ATP?",
+  options: ["1", "2", "3", "4"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué deporte tiene un aro y un tablero?",
+  options: ["Hockey", "Baloncesto", "Balonmano", "Béisbol"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué país organizó los Juegos Olímpicos de 2016?",
+  options: ["China", "Brasil", "Japón", "Rusia"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cómo se llama la competencia ciclista más famosa de Francia?",
+  options: ["Giro de Italia", "Vuelta a España", "Tour de Francia", "París-Roubaix"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿En tenis, qué significa completar un Golden Slam en carrera?",
-  options: ["Ganar los 4 Grand Slam en un año", "Ganar los 4 Grand Slam y oro olímpico a lo largo de la carrera", "Ganar ATP Finals y Davis", "Ganar solo en césped"],
+  text: "¿Qué deporte se juega en una mesa con red y paletas?",
+  options: ["Bádminton", "Ping pong", "Squash", "Frontón"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué distancia tiene oficialmente la prueba de 110 vallas masculina?",
-  options: ["100 m", "110 m", "120 m", "150 m"],
+  text: "¿Qué deportista es conocido como “el hombre más rápido del mundo”?",
+  options: ["Carl Lewis", "Usain Bolt", "Michael Phelps", "Neymar"],
   answer: 1
 },
 
-{
-  difficulty: "medio",
-  text: "¿Cuál es el peso del implemento en lanzamiento de bala masculino senior?",
-  options: ["6 kg", "7,26 kg", "8 kg", "7 kg"],
-  answer: 1
-},
+
+// NIVEL DIFICIL (20 preguntas)
 
 {
-  difficulty: "medio",
-  text: "¿Qué reglamento define el fuera de juego en fútbol a partir de la posición respecto al penúltimo defensor?",
-  options: ["Ley 11", "Ley 7", "Ley 3", "Ley 14"],
-  answer: 0
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuántos jugadores por equipo hay simultáneamente en waterpolo?",
-  options: ["6", "7", "8", "9"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuál es la duración estándar de una pelea profesional de boxeo por título mundial masculino?",
-  options: ["10 asaltos de 3 min", "12 asaltos de 3 min", "15 asaltos de 3 min", "12 asaltos de 2 min"],
+  difficulty: "dificil",
+  text: "¿Qué selección ganó la Eurocopa 2016?",
+  options: ["España", "Portugal", "Francia", "Italia"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué significa PAR en golf?",
-  options: ["Golpes promedio de los profesionales en un hoyo", "Golpes ideales fijados para completar un hoyo", "Límite de tiempo por hoyo", "Tipo de césped"],
-  answer: 1
-},
-{
-  difficulty: "dificil",
-  text: "¿Cuántas faltas personales eliminan a un jugador en la NBA?",
+  text: "¿Cuántos jugadores conforman un equipo de voleibol en cancha?",
   options: ["5", "6", "7", "8"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué significa PAR en golf?",
-  options: ["Golpes ideales para un hoyo", "Empate", "Tipo de palo", "Árbitro principal"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué superficie de tenis suele ser la más rápida?",
-  options: ["Arcilla", "Cemento", "Césped", "Sintética"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país ganó la Eurocopa 2012?",
-  options: ["Italia", "España", "Alemania", "Portugal"],
+  text: "¿Qué piloto ha ganado más campeonatos mundiales de Fórmula 1 hasta 2026?",
+  options: ["Ayrton Senna", "Lewis Hamilton", "Michael Schumacher", "Max Verstappen"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Cuántos jugadores hay por equipo en waterpolo dentro del agua?",
-  options: ["6", "7", "8", "9"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué selección ganó el primer Mundial de fútbol en 1930?",
+  text: "¿Qué país ganó el primer Mundial de fútbol en 1930?",
   options: ["Brasil", "Italia", "Uruguay", "Argentina"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué piloto tiene más campeonatos mundiales de Fórmula 1 compartiendo récord hasta 2026?",
-  options: ["Ayrton Senna", "Michael Schumacher", "Lewis Hamilton", "Hamilton y Schumacher"],
-  answer: 3
+  text: "¿Cómo se llama el trofeo de la NBA?",
+  options: ["Larry O'Brien", "Stanley Cup", "Vince Lombardi", "Davis Cup"],
+  answer: 0
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué país inventó el béisbol moderno?",
-  options: ["México", "Canadá", "Estados Unidos", "Cuba"],
+  text: "¿Qué nadador ganó 8 medallas de oro en Beijing 2008?",
+  options: ["Ryan Lochte", "Ian Thorpe", "Michael Phelps", "Mark Spitz"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué nadador ganó 8 medallas de oro en Pekín 2008?",
-  options: ["Ryan Lochte", "Michael Phelps", "Ian Thorpe", "Mark Spitz"],
+  text: "¿Qué país domina históricamente el rugby conocido como los All Blacks?",
+  options: ["Australia", "Sudáfrica", "Nueva Zelanda", "Inglaterra"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué tenista tiene más títulos de Roland Garros hasta 2026?",
+  options: ["Roger Federer", "Novak Djokovic", "Rafael Nadal", "Carlos Alcaraz"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué deporte utiliza un disco llamado puck?",
+  options: ["Curling", "Hockey sobre hielo", "Lacrosse", "Patinaje"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿En qué deporte se utiliza el término 'scrum'?",
-  options: ["Fútbol americano", "Rugby", "Hockey", "Críquet"],
+  text: "¿Qué país ganó el Mundial femenino de fútbol 2019?",
+  options: ["Alemania", "Estados Unidos", "Suecia", "Japón"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué equipo de fútbol juega en el estadio Santiago Bernabéu?",
-  options: ["Barcelona", "Atlético de Madrid", "Sevilla", "Real Madrid"],
+  text: "¿En qué ciudad se originaron los Juegos Olímpicos antiguos?",
+  options: ["Esparta", "Atenas", "Olimpia", "Roma"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué jugador de baloncesto era conocido como “Black Mamba”?",
+  options: ["LeBron James", "Kobe Bryant", "Shaquille O'Neal", "Stephen Curry"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué selección sudamericana ha ganado más Copas América hasta 2026?",
+  options: ["Argentina", "Brasil", "Uruguay", "Chile"],
+  answer: 0
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué país organiza el torneo de tenis Roland Garros?",
+  options: ["España", "Australia", "Estados Unidos", "Francia"],
   answer: 3
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Cómo se llama el campeonato mundial de motociclismo?",
+  options: ["MotoGP", "Nascar", "IndyCar", "Rally Dakar"],
+  answer: 0
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué boxeador fue conocido como “The Greatest”?",
+  options: ["Mike Tyson", "Muhammad Ali", "Joe Frazier", "Rocky Marciano"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué selección ganó el Mundial de Rugby 2023?",
+  options: ["Sudáfrica", "Nueva Zelanda", "Francia", "Inglaterra"],
+  answer: 0
 },
 
 {
@@ -1446,201 +1560,166 @@ body {
 
 {
   difficulty: "dificil",
-  text: "¿Qué selección femenina ganó el Mundial de fútbol 2023?",
-  options: ["Inglaterra", "España", "Estados Unidos", "Suecia"],
+  text: "¿Qué deportista jamaicano dominó los 100 y 200 metros planos?",
+  options: ["Yohan Blake", "Usain Bolt", "Asafa Powell", "Tyson Gay"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué país ha ganado más medallas olímpicas históricamente?",
-  options: ["China", "Rusia", "Estados Unidos", "Reino Unido"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país ha ganado más Copas del Mundo FIFA masculinas hasta 2026?",
-  options: ["Alemania", "Italia", "Brasil", "Argentina"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuántas faltas personales excluyen por acumulación en NBA (temporada regular)?",
-  options: ["5", "6", "7", "8"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿En ciclismo de ruta, qué clasificación identifica al líder por tiempo acumulado en una gran vuelta?",
-  options: ["Clasificación por puntos", "Clasificación de la montaña", "Clasificación general", "Clasificación joven"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es la longitud oficial de una piscina olímpica?",
-  options: ["25 m", "33,3 m", "50 m", "60 m"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué superficie de tenis suele producir el bote más bajo y rápido?",
-  options: ["Arcilla", "Césped", "Dura acrílica", "Moqueta lenta"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Cuántas competiciones puntúan en el decatlón?",
-  options: ["8", "9", "10", "12"],
-  answer: 2
-},
-{
-  difficulty: "experto",
-  text: "¿Qué significa DNF en automovilismo?",
-  options: ["Did Not Finish", "Driver Not Fast", "Danger Near Finish", "Do Not Follow"],
+  text: "¿Qué país ganó el Mundial de fútbol femenino 2023?",
+  options: ["España", "Inglaterra", "Estados Unidos", "Suecia"],
   answer: 0
 },
 
+
+// NIVEL EXPERTO (20 preguntas)
+
 {
   difficulty: "experto",
-  text: "¿Cuántas pruebas conforman el decatlón?",
-  options: ["8", "9", "10", "12"],
+  text: "¿Qué club ganó la primera Copa de Europa en 1956?",
+  options: ["Milan", "Barcelona", "Real Madrid", "Benfica"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál es la altura oficial de la red masculina de voleibol?",
-  options: ["2.24 m", "2.35 m", "2.43 m", "2.50 m"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué ciclista ganó siete Tours de Francia antes de ser despojado de sus títulos?",
-  options: ["Eddy Merckx", "Chris Froome", "Lance Armstrong", "Miguel Indurain"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué país organizó los Juegos Olímpicos de 2008?",
-  options: ["Japón", "China", "Reino Unido", "Brasil"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué tenista posee más títulos de Grand Slam masculinos hasta 2026?",
+  text: "¿Quién posee el récord de más Grand Slams masculinos hasta 2026?",
   options: ["Roger Federer", "Rafael Nadal", "Novak Djokovic", "Pete Sampras"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué selección ganó el Mundial de rugby de 2019?",
-  options: ["Nueva Zelanda", "Sudáfrica", "Inglaterra", "Australia"],
+  text: "¿Qué selección ganó el llamado “Maracanazo” de 1950?",
+  options: ["Argentina", "Uruguay", "Brasil", "Italia"],
   answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué boxeador fue conocido como 'The Greatest'?",
-  options: ["Mike Tyson", "Muhammad Ali", "Joe Frazier", "Sugar Ray Leonard"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿En qué ciudad se celebraron los Juegos Olímpicos de 1992?",
-  options: ["Atlanta", "Barcelona", "Sídney", "Seúl"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué jugador de baloncesto es conocido como 'King James'?",
-  options: ["Stephen Curry", "Kobe Bryant", "LeBron James", "Kevin Durant"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué país ganó el Mundial de fútbol de 2010?",
-  options: ["Alemania", "Países Bajos", "Brasil", "España"],
-  answer: 3
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué deporte incluye movimientos llamados ippon y waza-ari?",
-  options: ["Karate", "Taekwondo", "Judo", "Esgrima"],
-  answer: 2
 },
 
 {
   difficulty: "experto",
   text: "¿Qué piloto brasileño tricampeón murió en Imola en 1994?",
-  options: ["Nelson Piquet", "Rubens Barrichello", "Felipe Massa", "Ayrton Senna"],
-  answer: 3
+  options: ["Nelson Piquet", "Rubens Barrichello", "Ayrton Senna", "Felipe Massa"],
+  answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué es un eagle en golf?",
-  options: ["Un golpe sobre par", "Dos golpes bajo par", "Tres golpes bajo par", "Par en hoyo par 5"],
+  text: "¿Qué atleta obtuvo cuatro medallas de oro en Berlín 1936?",
+  options: ["Carl Lewis", "Jesse Owens", "Paavo Nurmi", "Emil Zatopek"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué equipo de la NFL ha ganado más Super Bowls (empatado en la cima histórica)?",
-  options: ["Dallas Cowboys", "New England Patriots", "Pittsburgh Steelers", "Patriots y Steelers comparten el máximo"],
-  answer: 3
-},
-
-{
-  difficulty: "experto",
-  text: "¿Cuánto dura el tiempo reglamentario en handball?",
-  options: ["2x25 min", "2x30 min", "4x15 min", "2x35 min"],
+  text: "¿Qué selección ganó la primera Copa Mundial femenina en 1991?",
+  options: ["Noruega", "Estados Unidos", "Alemania", "China"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué significan las siglas DNF en automovilismo?",
-  options: ["Did Not Finish", "Do Not Follow", "Driver Not Fast", "Downforce Not Fixed"],
+  text: "¿Qué ciclista ganó cinco Tours de Francia consecutivos entre 1991 y 1995?",
+  options: ["Miguel Indurain", "Lance Armstrong", "Eddy Merckx", "Chris Froome"],
   answer: 0
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuántos jueces puntúan normalmente una pelea de boxeo profesional?",
-  options: ["1", "2", "3", "5"],
+  text: "¿Qué país ha ganado más medallas olímpicas históricamente?",
+  options: ["China", "Rusia", "Estados Unidos", "Reino Unido"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál es la altura reglamentaria de la red en vóley masculino en cancha?",
-  options: ["2,24 m", "2,35 m", "2,43 m", "2,50 m"],
+  text: "¿Qué entrenador popularizó el “tiki-taka” en el Barcelona moderno?",
+  options: ["Johan Cruyff", "Pep Guardiola", "Luis Enrique", "Frank Rijkaard"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué boxeador terminó invicto con récord de 50-0?",
+  options: ["Muhammad Ali", "Floyd Mayweather Jr.", "Mike Tyson", "Manny Pacquiao"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué selección ganó tres Mundiales consecutivos entre 1958 y 1970?",
+  options: ["Italia", "Alemania", "Brasil", "Argentina"],
   answer: 2
-}
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué franquicia ha ganado más títulos de la NBA hasta 2026?",
+  options: ["Chicago Bulls", "Golden State Warriors", "Los Angeles Lakers", "Boston Celtics"],
+  answer: 3
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué jugador marcó la famosa “Mano de Dios”?",
+  options: ["Pelé", "Maradona", "Messi", "Cruyff"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué nadadora ganó siete oros olímpicos en Múnich 1972?",
+  options: ["Katie Ledecky", "Shane Gould", "Kristin Otto", "Janet Evans"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué selección africana llegó primero a semifinales de un Mundial?",
+  options: ["Nigeria", "Camerún", "Marruecos", "Ghana"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país ganó el primer campeonato mundial de baloncesto FIBA en 1950?",
+  options: ["Estados Unidos", "Argentina", "URSS", "Yugoslavia"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué tenista femenina ganó 23 Grand Slams en la era Open?",
+  options: ["Steffi Graf", "Margaret Court", "Serena Williams", "Martina Navratilova"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué ciudad albergó los Juegos Olímpicos de 1968 famosos por la altitud?",
+  options: ["Tokio", "Múnich", "México D.F.", "Montreal"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué jugador de hockey fue conocido como “The Great One”?",
+  options: ["Mario Lemieux", "Wayne Gretzky", "Sidney Crosby", "Bobby Orr"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué escudería italiana es la más histórica de la Fórmula 1?",
+  options: ["McLaren", "Williams", "Ferrari", "Mercedes"],
+  answer: 2
+},
 
 ],
       ciencias: [
 
-{
-  difficulty: "medio",
-  text: "¿Qué ecuación relaciona energía y frecuencia de un fotón?",
-  options: ["E=mc²", "E=hf", "PV=nRT", "F=ma"],
-  answer: 1
-},
+// NIVEL MEDIO (20 preguntas)
+
 {
   difficulty: "medio",
   text: "¿Qué planeta es conocido como el planeta rojo?",
@@ -1650,8 +1729,8 @@ body {
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el órgano más grande del cuerpo humano?",
-  options: ["Hígado", "Piel", "Corazón", "Pulmón"],
+  text: "¿Cuál es el órgano principal del sistema respiratorio?",
+  options: ["Corazón", "Pulmón", "Hígado", "Riñón"],
   answer: 1
 },
 
@@ -1664,37 +1743,30 @@ body {
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el símbolo químico del oro?",
-  options: ["Ag", "Au", "O", "Fe"],
+  text: "¿Cuál es el estado del agua a 0°C?",
+  options: ["Gaseoso", "Sólido", "Plasma", "Líquido"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué fuerza nos mantiene sobre la superficie de la Tierra?",
+  text: "¿Qué fuerza nos mantiene sobre la Tierra?",
   options: ["Magnetismo", "Electricidad", "Gravedad", "Fricción"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué parte de la célula contiene el material genético?",
-  options: ["Citoplasma", "Membrana", "Núcleo", "Mitocondria"],
+  text: "¿Qué parte de la célula contiene el ADN?",
+  options: ["Membrana", "Citoplasma", "Núcleo", "Mitocondria"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué astro está en el centro del sistema solar?",
-  options: ["La Luna", "Marte", "El Sol", "Júpiter"],
+  text: "¿Cuál es el planeta más grande del sistema solar?",
+  options: ["Marte", "Saturno", "Júpiter", "Neptuno"],
   answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué estado de la materia tiene forma y volumen definidos?",
-  options: ["Líquido", "Gaseoso", "Plasma", "Sólido"],
-  answer: 3
 },
 
 {
@@ -1706,135 +1778,90 @@ body {
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el océano más grande del planeta?",
-  options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué vitamina produce principalmente el cuerpo con la luz solar?",
-  options: ["Vitamina A", "Vitamina B12", "Vitamina C", "Vitamina D"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cómo se llama el proceso por el cual el agua pasa de líquido a vapor?",
-  options: ["Condensación", "Evaporación", "Solidificación", "Fusión"],
+  text: "¿Cuál es el símbolo químico del oxígeno?",
+  options: ["Ox", "O", "Og", "Om"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué instrumento se utiliza para observar estrellas y planetas?",
-  options: ["Microscopio", "Termómetro", "Telescopio", "Barómetro"],
+  text: "¿Qué instrumento se utiliza para observar estrellas?",
+  options: ["Microscopio", "Barómetro", "Telescopio", "Termómetro"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué orgánulo celular realiza principalmente la fosforilación oxidativa?",
-  options: ["Ribosoma", "Mitocondria", "Lisosoma", "Aparato de Golgi"],
+  text: "¿Cuál es el proceso por el que el agua pasa de líquido a gas?",
+  options: ["Condensación", "Solidificación", "Evaporación", "Fusión"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué animal es el mamífero más grande del mundo?",
+  options: ["Elefante", "Tiburón", "Ballena azul", "Jirafa"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué astro ilumina la Tierra durante el día?",
+  options: ["La Luna", "Marte", "El Sol", "Venus"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué vitamina produce el cuerpo con ayuda del Sol?",
+  options: ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina K"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué parte del cuerpo bombea la sangre?",
+  options: ["Pulmón", "Corazón", "Riñón", "Cerebro"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué ley establece que el volumen de un gas es inversamente proporcional a la presión a T constante?",
-  options: ["Ley de Charles", "Ley de Boyle", "Ley de Gay-Lussac", "Ley de Avogadro"],
+  text: "¿Qué científico propuso la teoría de la evolución?",
+  options: ["Pasteur", "Darwin", "Mendel", "Copérnico"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué partícula mediadora se asocia a la interacción electromagnética?",
-  options: ["Gluón", "Fotón", "Bosón W", "Gravitón"],
+  text: "¿Cuál es el metal líquido a temperatura ambiente?",
+  options: ["Oro", "Hierro", "Mercurio", "Plata"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué planeta está más cerca del Sol?",
+  options: ["Venus", "Mercurio", "Marte", "Tierra"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el nombre del proceso por el cual una estrella como el Sol produce energía?",
-  options: ["Fisión nuclear", "Fusión nuclear", "Desintegración beta", "Combustión química"],
-  answer: 1
+  text: "¿Qué órgano controla el sistema nervioso?",
+  options: ["Pulmón", "Hígado", "Cerebro", "Páncreas"],
+  answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué base nitrogenada está presente en ARN pero no en ADN?",
-  options: ["Timina", "Uracilo", "Guanina", "Citosina"],
+  text: "¿Cómo se llama la galaxia donde está el sistema solar?",
+  options: ["Andrómeda", "Vía Láctea", "Orión", "Centauro"],
   answer: 1
 },
 
-{
-  difficulty: "medio",
-  text: "¿Qué científico formuló las ecuaciones clásicas del electromagnetismo?",
-  options: ["Faraday", "Ampère", "Maxwell", "Planck"],
-  answer: 2
-},
 
-{
-  difficulty: "dificil",
-  text: "¿Qué escala sísmica mide energía liberada y ha sustituido en gran parte a Richter?",
-  options: ["Mercalli", "Momento sísmico (Mw)", "Beaufort", "Fujita"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué tipo de enlace une nucleótidos adyacentes en una cadena de ADN?",
-  options: ["Puente de hidrógeno", "Iónico", "Fosfodiéster", "Peptídico"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué fenómeno describe la desviación aparente de objetos en movimiento por la rotación terrestre?",
-  options: ["Efecto Doppler", "Efecto Coriolis", "Precesión", "Resonancia"],
-  answer: 1
-},
-{
-  difficulty: "dificil",
-  text: "¿Qué ecuación relaciona energía y masa propuesta por Einstein?",
-  options: ["F=ma", "E=mc²", "PV=nRT", "V=IR"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué orgánulo celular produce la mayor parte de la energía en forma de ATP?",
-  options: ["Núcleo", "Mitocondria", "Ribosoma", "Lisosoma"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué científico desarrolló la teoría de la evolución por selección natural?",
-  options: ["Mendel", "Newton", "Darwin", "Pasteur"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué tipo de enlace comparte electrones entre átomos?",
-  options: ["Iónico", "Metálico", "Covalente", "Nuclear"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es el planeta más grande del sistema solar?",
-  options: ["Saturno", "Marte", "Júpiter", "Urano"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué ley establece que la energía no se crea ni se destruye?",
-  options: ["Ley de Ohm", "Primera ley de la termodinámica", "Ley de Boyle", "Ley de Coulomb"],
-  answer: 1
-},
+// NIVEL DIFICIL (20 preguntas)
 
 {
   difficulty: "dificil",
@@ -1845,119 +1872,214 @@ body {
 
 {
   difficulty: "dificil",
+  text: "¿Cuál es la fórmula química del agua?",
+  options: ["CO2", "H2O", "O2", "NaCl"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué ley establece que la energía no se crea ni se destruye?",
+  options: ["Ley de Ohm", "Primera ley de Newton", "Ley de conservación de la energía", "Ley de Boyle"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué científico desarrolló la teoría de la relatividad?",
+  options: ["Newton", "Bohr", "Einstein", "Faraday"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Cuál es el hueso más largo del cuerpo humano?",
+  options: ["Tibia", "Radio", "Fémur", "Húmero"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué planeta tiene los anillos más visibles?",
+  options: ["Marte", "Júpiter", "Saturno", "Urano"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué órgano produce la insulina?",
+  options: ["Hígado", "Páncreas", "Riñón", "Estómago"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
   text: "¿Qué científico descubrió la penicilina?",
-  options: ["Louis Pasteur", "Alexander Fleming", "Marie Curie", "Nikola Tesla"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué planeta tiene los anillos más visibles del sistema solar?",
-  options: ["Júpiter", "Saturno", "Neptuno", "Urano"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué unidad mide la intensidad de corriente eléctrica?",
-  options: ["Voltio", "Ohmio", "Amperio", "Vatio"],
+  options: ["Pasteur", "Darwin", "Alexander Fleming", "Curie"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué gas es el más abundante en la atmósfera terrestre?",
-  options: ["Oxígeno", "Hidrógeno", "Nitrógeno", "Dióxido de carbono"],
+  text: "¿Qué tipo de energía posee un objeto en movimiento?",
+  options: ["Potencial", "Nuclear", "Cinética", "Química"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué fenómeno ocurre cuando la Luna se interpone entre la Tierra y el Sol?",
-  options: ["Eclipse lunar", "Aurora boreal", "Eclipse solar", "Marea roja"],
+  text: "¿Cuál es el elemento químico más abundante en el universo?",
+  options: ["Oxígeno", "Helio", "Hidrógeno", "Carbono"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué científico propuso las tres leyes del movimiento?",
-  options: ["Galileo", "Einstein", "Newton", "Bohr"],
+  text: "¿Qué órgano filtra la sangre en el cuerpo humano?",
+  options: ["Pulmón", "Riñón", "Corazón", "Bazo"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué rama de la biología estudia los genes?",
+  options: ["Ecología", "Botánica", "Genética", "Anatomía"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué metal líquido se encuentra en termómetros tradicionales?",
-  options: ["Plomo", "Mercurio", "Hierro", "Cobre"],
+  text: "¿Qué instrumento mide la presión atmosférica?",
+  options: ["Termómetro", "Barómetro", "Anemómetro", "Voltímetro"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Cuál es el valor aproximado de la constante de gravitación universal G?",
-  options: ["6,67×10^-11 N·m²/kg²", "9,81 m/s²", "3,00×10^8 m/s", "1,60×10^-19 C"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué ley de la termodinámica introduce el concepto de entropía?",
-  options: ["Primera", "Segunda", "Tercera", "Ley cero"],
+  text: "¿Qué científico propuso el modelo heliocéntrico?",
+  options: ["Galileo", "Copérnico", "Kepler", "Newton"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué método usa CRISPR-Cas9 en biotecnología?",
-  options: ["Secuenciación proteica", "Edición genética dirigida", "Clonación por transferencia nuclear obligatoria", "PCR cuantitativa"],
+  text: "¿Qué tipo de célula no tiene núcleo definido?",
+  options: ["Eucariota", "Animal", "Vegetal", "Procariota"],
+  answer: 3
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué fenómeno ocurre cuando la Luna cubre al Sol?",
+  options: ["Aurora", "Eclipse solar", "Marea roja", "Cometa"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué planeta tarda más tiempo en dar una vuelta al Sol?",
+  options: ["Júpiter", "Neptuno", "Saturno", "Urano"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué científico formuló las leyes del movimiento planetario?",
+  options: ["Galileo", "Newton", "Kepler", "Einstein"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Cuál es la unidad básica de la vida?",
+  options: ["Átomo", "Molécula", "Tejido", "Célula"],
+  answer: 3
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué gas protege a la Tierra de la radiación ultravioleta?",
+  options: ["Oxígeno", "Ozono", "Helio", "Hidrógeno"],
+  answer: 1
+},
+
+
+// NIVEL EXPERTO (20 preguntas)
+
+{
+  difficulty: "experto",
+  text: "¿Qué físico formuló el principio de incertidumbre?",
+  options: ["Einstein", "Heisenberg", "Bohr", "Planck"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué metal de transición tiene configuración electrónica [Ar]3d10 4s1?",
-  options: ["Níquel", "Cobre", "Zinc", "Cromo"],
+  text: "¿Qué organelo celular produce ATP principalmente?",
+  options: ["Ribosoma", "Mitocondria", "Lisosoma", "Núcleo"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué fuerza intermolecular explica el alto punto de ebullición del agua?",
-  options: ["Dipolo inducido", "Puente de hidrógeno", "Van der Waals débil", "Enlace metálico"],
-  answer: 1
-},
-{
-  difficulty: "experto",
-  text: "¿Qué partícula mediadora está asociada con la fuerza electromagnética?",
-  options: ["Gluón", "Fotón", "Bosón W", "Neutrino"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué científico formuló las ecuaciones clásicas del electromagnetismo?",
-  options: ["Faraday", "Maxwell", "Ampère", "Tesla"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué fenómeno describe la desviación aparente de objetos por la rotación terrestre?",
-  options: ["Efecto Doppler", "Efecto Coriolis", "Resonancia", "Difracción"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué tipo de mutación no altera la secuencia de aminoácidos?",
-  options: ["Missense", "Frameshift", "Silenciosa", "Nonsense"],
+  text: "¿Qué constante representa la velocidad de la luz en el vacío?",
+  options: ["g", "h", "c", "k"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál es la unidad del Sistema Internacional para la capacitancia eléctrica?",
-  options: ["Tesla", "Faradio", "Ohmio", "Henry"],
+  text: "¿Qué científico desarrolló las leyes de la herencia genética?",
+  options: ["Darwin", "Pasteur", "Mendel", "Watson"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué tipo de enlace químico comparte electrones?",
+  options: ["Iónico", "Metálico", "Covalente", "Nuclear"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué planeta posee la mayor cantidad de lunas conocidas hasta 2026?",
+  options: ["Júpiter", "Saturno", "Urano", "Neptuno"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué ecuación famosa relaciona masa y energía?",
+  options: ["F=ma", "PV=nRT", "E=mc²", "V=IR"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué científico descubrió la radiactividad junto con Marie Curie?",
+  options: ["Rutherford", "Henri Becquerel", "Bohr", "Faraday"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué estructura del ADN tiene forma de doble hélice?",
+  options: ["Proteína", "ARN", "Molécula de ADN", "Cromosoma"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué rama de la física estudia partículas subatómicas?",
+  options: ["Óptica", "Termodinámica", "Física cuántica", "Mecánica clásica"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué científico propuso la selección natural?",
+  options: ["Lamarck", "Darwin", "Mendel", "Huxley"],
   answer: 1
 },
 
@@ -1970,108 +2092,83 @@ body {
 
 {
   difficulty: "experto",
-  text: "¿Qué metal tiene símbolo químico Hg?",
-  options: ["Hierro", "Magnesio", "Mercurio", "Hafnio"],
+  text: "¿Qué elemento químico tiene número atómico 79?",
+  options: ["Plata", "Platino", "Oro", "Mercurio"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué capa de la atmósfera contiene la mayor concentración de ozono?",
-  options: ["Troposfera", "Mesosfera", "Estratosfera", "Termosfera"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué científico propuso el principio de incertidumbre?",
-  options: ["Bohr", "Heisenberg", "Schrödinger", "Dirac"],
+  text: "¿Qué científico descubrió los rayos X?",
+  options: ["Tesla", "Roentgen", "Curie", "Faraday"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué estructura celular sintetiza proteínas?",
-  options: ["Mitocondria", "Lisosoma", "Ribosoma", "Centriolo"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué fuerza mantiene a los planetas en órbita alrededor del Sol?",
-  options: ["Magnetismo", "Energía nuclear", "Gravedad", "Electricidad"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué científico desarrolló las leyes de la herencia genética?",
-  options: ["Darwin", "Mendel", "Pasteur", "Watson"],
+  text: "¿Qué fenómeno explica la desviación de la luz por gravedad?",
+  options: ["Efecto Doppler", "Relatividad general", "Difracción", "Reflexión"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué tipo de galaxia es la Vía Láctea?",
-  options: ["Elíptica", "Irregular", "Espiral barrada", "Lenticular"],
+  text: "¿Qué biomolécula almacena la información genética?",
+  options: ["Proteína", "Lípido", "ADN", "Glucosa"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué enunciado describe mejor la paradoja de Fermi?",
-  options: ["No hay energía oscura", "Alta probabilidad de vida extraterrestre, pero sin evidencias observadas", "La expansión del universo se frena", "Los quásares son estrellas"],
+  text: "¿Qué científico formuló las leyes de la electricidad y magnetismo clásicas?",
+  options: ["Newton", "Maxwell", "Galvani", "Volta"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué capa de la atmósfera contiene la mayor parte del ozono estratosférico?",
-  options: ["Troposfera", "Estratosfera", "Mesosfera", "Termosfera"],
+  text: "¿Qué proceso convierte glucosa en energía dentro de la célula?",
+  options: ["Fotosíntesis", "Respiración celular", "Fermentación", "Difusión"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál es la unidad SI de capacitancia eléctrica?",
-  options: ["Ohm", "Henry", "Faradio", "Tesla"],
+  text: "¿Qué partícula subatómica no posee carga eléctrica?",
+  options: ["Electrón", "Protón", "Neutrón", "Positrón"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué tipo de mutación no altera la secuencia aminoacídica final?",
-  options: ["Missense", "Nonsense", "Silenciosa", "Frameshift"],
+  text: "¿Qué teoría explica el origen del universo moderno?",
+  options: ["Teoría heliocéntrica", "Teoría cuántica", "Big Bang", "Estado estacionario"],
   answer: 2
 },
-
-{
-  difficulty: "experto",
-  text: "¿Qué postulado central plantea la teoría celular moderna?",
-  options: ["Las células surgen por generación espontánea", "Toda célula proviene de otra célula preexistente", "Solo animales tienen células", "El núcleo no contiene material genético"],
-  answer: 1
-}
 
 ],
       geografia: [
 
+// NIVEL MEDIO (20 preguntas)
+
 {
   difficulty: "medio",
-  text: "¿Cuál es el río más largo del mundo según la medición tradicional más aceptada?",
-  options: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"],
+  text: "¿Cuál es el río más largo del mundo?",
+  options: ["Nilo", "Amazonas", "Yangtsé", "Misisipi"],
   answer: 1
 },
+
 {
   difficulty: "medio",
-  text: "¿Cuál es el país más grande del mundo por superficie?",
+  text: "¿Cuál es el país más grande del mundo?",
   options: ["China", "Estados Unidos", "Canadá", "Rusia"],
   answer: 3
 },
 
 {
   difficulty: "medio",
-  text: "¿Cuál es la capital de Australia?",
-  options: ["Sídney", "Melbourne", "Canberra", "Perth"],
+  text: "¿Cuál es la capital de Francia?",
+  options: ["Madrid", "Roma", "París", "Lisboa"],
   answer: 2
 },
 
@@ -2084,287 +2181,288 @@ body {
 
 {
   difficulty: "medio",
-  text: "¿En qué continente se encuentra Egipto?",
+  text: "¿En qué continente está Egipto?",
   options: ["Asia", "Europa", "África", "Oceanía"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el río más largo del mundo según la medición tradicional?",
-  options: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"],
+  text: "¿Cuál es la montaña más alta del mundo?",
+  options: ["K2", "Everest", "Aconcagua", "Kilimanjaro"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué país tiene forma de bota en Europa?",
-  options: ["Grecia", "Portugal", "Italia", "Croacia"],
-  answer: 2
+  text: "¿Cuál es la capital de Japón?",
+  options: ["Seúl", "Tokio", "Pekín", "Bangkok"],
+  answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué desierto es el más grande del mundo entre los cálidos?",
-  options: ["Gobi", "Kalahari", "Atacama", "Sahara"],
+  text: "¿Qué desierto es el más grande del mundo?",
+  options: ["Sahara", "Gobi", "Kalahari", "Antártico"],
   answer: 3
 },
 
 {
   difficulty: "medio",
-  text: "¿Cuál es la capital de Japón?",
-  options: ["Pekín", "Seúl", "Tokio", "Bangkok"],
+  text: "¿Qué país tiene forma de bota?",
+  options: ["Grecia", "España", "Italia", "Portugal"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué cordillera atraviesa gran parte de Sudamérica?",
-  options: ["Alpes", "Himalaya", "Andes", "Rocosas"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país tiene más población del mundo hasta 2026?",
-  options: ["China", "India", "Estados Unidos", "Indonesia"],
+  text: "¿Cuál es el continente más pequeño?",
+  options: ["Europa", "Oceanía", "Antártida", "América"],
   answer: 1
 },
 
 {
   difficulty: "medio",
   text: "¿Qué línea imaginaria divide la Tierra en hemisferio norte y sur?",
-  options: ["Trópico de Cáncer", "Meridiano de Greenwich", "Ecuador", "Círculo Polar Ártico"],
+  options: ["Meridiano de Greenwich", "Trópico de Cáncer", "Ecuador", "Círculo Polar"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cuál es la capital de Argentina?",
+  options: ["Santiago", "Lima", "Buenos Aires", "Montevideo"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué país es conocido por sus canales y tulipanes?",
+  options: ["Bélgica", "Dinamarca", "Países Bajos", "Suecia"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿En qué continente se encuentra Brasil?",
+  options: ["Europa", "Asia", "África", "América del Sur"],
+  answer: 3
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué océano separa América de Europa?",
+  options: ["Pacífico", "Atlántico", "Índico", "Ártico"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cuál es la capital de Colombia?",
+  options: ["Medellín", "Quito", "Bogotá", "Caracas"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué país tiene más población en el mundo hasta 2026?",
+  options: ["India", "China", "Estados Unidos", "Indonesia"],
+  answer: 0
+},
+
+{
+  difficulty: "medio",
+  text: "¿Cuál es el lago más grande del mundo?",
+  options: ["Superior", "Victoria", "Baikal", "Mar Caspio"],
+  answer: 3
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué continente está completamente cubierto de hielo?",
+  options: ["Europa", "Asia", "Antártida", "Oceanía"],
   answer: 2
 },
 
 {
   difficulty: "medio",
   text: "¿Cuál es la capital de Canadá?",
-  options: ["Toronto", "Vancouver", "Montreal", "Ottawa"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿En qué continente se encuentra Brasil?",
-  options: ["Europa", "África", "Asia", "América del Sur"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país tiene la mayor superficie territorial del planeta?",
-  options: ["Canadá", "China", "Estados Unidos", "Rusia"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿En qué continente se encuentra el desierto del Kalahari?",
-  options: ["Asia", "Oceanía", "África", "América"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Cuál es la capital de Australia?",
-  options: ["Sídney", "Melbourne", "Canberra", "Perth"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué cordillera separa Europa de Asia de forma tradicional?",
-  options: ["Alpes", "Himalaya", "Urales", "Andes"],
-  answer: 2
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué océano es el más profundo del planeta?",
-  options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
-  answer: 3
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué país africano tiene la mayor población?",
-  options: ["Egipto", "Nigeria", "Sudáfrica", "Etiopía"],
+  options: ["Toronto", "Ottawa", "Vancouver", "Montreal"],
   answer: 1
 },
 
-{
-  difficulty: "dificil",
-  text: "¿Qué estrecho separa Asia de América del Norte?",
-  options: ["Gibraltar", "Bósforo", "Bering", "Malaca"],
-  answer: 2
-},
+
+// NIVEL DIFICIL (20 preguntas)
 
 {
   difficulty: "dificil",
-  text: "¿Cuál es el lago más profundo del mundo?",
-  options: ["Superior", "Victoria", "Baikal", "Titicaca"],
-  answer: 2
-},
-{
-  difficulty: "dificil",
-  text: "¿Qué estrecho separa Asia de América del Norte?",
-  options: ["Gibraltar", "Bering", "Malaca", "Ormuz"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es el lago más profundo del mundo?",
-  options: ["Superior", "Victoria", "Baikal", "Titicaca"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país tiene la mayor cantidad de islas del mundo?",
-  options: ["Indonesia", "Japón", "Filipinas", "Suecia"],
-  answer: 3
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es la montaña más alta de África?",
-  options: ["Monte Kenia", "Kilimanjaro", "Atlas", "Everest"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país sudamericano no tiene salida al mar?",
-  options: ["Chile", "Uruguay", "Paraguay", "Ecuador"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué mar separa Europa de África?",
-  options: ["Mar Negro", "Mar Rojo", "Mar Mediterráneo", "Mar Caspio"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es la capital de Nueva Zelanda?",
-  options: ["Auckland", "Christchurch", "Wellington", "Hamilton"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país atraviesan tanto el ecuador como el meridiano de Greenwich?",
-  options: ["Gabón", "Brasil", "Indonesia", "Kenia"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué país tiene más husos horarios oficiales?",
+  text: "¿Qué país tiene la mayor cantidad de husos horarios?",
   options: ["Rusia", "Estados Unidos", "Francia", "China"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Cuál es el punto más bajo de la superficie terrestre expuesta?",
-  options: ["Valle de la Muerte", "Mar Muerto", "Depresión de Qattara", "Lago Assal"],
-  answer: 1
+  text: "¿Cuál es el estrecho que separa Asia de América?",
+  options: ["Gibraltar", "Bósforo", "Bering", "Malaca"],
+  answer: 2
 },
 
 {
   difficulty: "dificil",
   text: "¿Qué río atraviesa la ciudad de Budapest?",
-  options: ["Danubio", "Rin", "Támesis", "Volga"],
+  options: ["Danubio", "Rin", "Volga", "Támesis"],
   answer: 0
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué desierto es considerado el más árido del mundo?",
-  options: ["Sahara", "Atacama", "Namib", "Gobi"],
+  text: "¿Qué cordillera atraviesa gran parte de América del Sur?",
+  options: ["Alpes", "Himalaya", "Andes", "Rocosas"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué país africano tiene más población?",
+  options: ["Egipto", "Nigeria", "Sudáfrica", "Etiopía"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué archipiélago pertenece a Ecuador?",
-  options: ["Canarias", "Malvinas", "Galápagos", "Azores"],
+  text: "¿Cuál es la capital de Australia?",
+  options: ["Sídney", "Melbourne", "Canberra", "Perth"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Cuál es la capital más alta del mundo?",
-  options: ["Quito", "La Paz", "Bogotá", "Katmandú"],
+  text: "¿Qué país posee la mayor selva tropical del mundo?",
+  options: ["Colombia", "Perú", "Brasil", "Indonesia"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué mar es famoso por su alta salinidad y por permitir flotar fácilmente?",
+  options: ["Mar Rojo", "Mar Negro", "Mar Muerto", "Mar Caspio"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué país europeo no tiene capital oficial?",
+  options: ["Suiza", "Luxemburgo", "Liechtenstein", "Mónaco"],
+  answer: 0
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué volcán destruyó Pompeya en el año 79 d.C.?",
+  options: ["Etna", "Kilimanjaro", "Vesubio", "Fuji"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué país tiene la ciudad de Estambul en dos continentes?",
+  options: ["Grecia", "Turquía", "Rusia", "Egipto"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué país posee la mayor cantidad de islas del mundo?",
-  options: ["Indonesia", "Filipinas", "Suecia", "Japón"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué línea imaginaria divide la Tierra en hemisferio norte y sur?",
-  options: ["Meridiano de Greenwich", "Trópico de Cáncer", "Ecuador", "Círculo Polar Ártico"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Cuál es la montaña más alta de África?",
-  options: ["Monte Kenia", "Kilimanjaro", "Atlas", "Ruwenzori"],
+  text: "¿Qué río pasa por Egipto y desemboca en el Mediterráneo?",
+  options: ["Amazonas", "Nilo", "Danubio", "Tigris"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
   text: "¿Qué país sudamericano no tiene salida al mar?",
-  options: ["Uruguay", "Ecuador", "Paraguay", "Colombia"],
+  options: ["Chile", "Ecuador", "Bolivia", "Uruguay"],
   answer: 2
 },
 
 {
-  difficulty: "experto",
-  text: "¿Qué país atraviesan tanto el ecuador como el meridiano de Greenwich?",
-  options: ["Brasil", "Gabón", "Indonesia", "República Democrática del Congo"],
+  difficulty: "dificil",
+  text: "¿Cuál es la capital de Turquía?",
+  options: ["Estambul", "Ankara", "Esmirna", "Antalya"],
   answer: 1
 },
 
 {
-  difficulty: "experto",
-  text: "¿Cuál es el punto más bajo de la superficie terrestre expuesta?",
-  options: ["Valle de la Muerte", "Mar Muerto", "Depresión de Qattara", "Lago Assal"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué mar interior limita con Jordania, Israel y Cisjordania?",
-  options: ["Mar Caspio", "Mar Negro", "Mar Muerto", "Mar Rojo"],
-  answer: 2
-},
-{
-  difficulty: "experto",
-  text: "¿Qué país tiene fronteras con más países del mundo empatando el récord histórico?",
+  difficulty: "dificil",
+  text: "¿Qué país comparte frontera con más países?",
   options: ["China", "Rusia", "Brasil", "India"],
   answer: 0
 },
 
 {
-  difficulty: "experto",
-  text: "¿Cuál es el estrecho que conecta el mar Mediterráneo con el océano Atlántico?",
-  options: ["Bering", "Ormuz", "Gibraltar", "Malaca"],
+  difficulty: "dificil",
+  text: "¿Qué continente tiene más países?",
+  options: ["Europa", "Asia", "África", "América"],
   answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Cuál es la isla más grande del mundo?",
+  options: ["Madagascar", "Groenlandia", "Borneo", "Nueva Guinea"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué país tiene el monte Everest?",
+  options: ["India", "China", "Nepal", "Pakistán"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué océano baña la costa este de África?",
+  options: ["Pacífico", "Atlántico", "Índico", "Ártico"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué ciudad es conocida como la “Ciudad Eterna”?",
+  options: ["Atenas", "Roma", "París", "Jerusalén"],
+  answer: 1
+},
+
+
+// NIVEL EXPERTO (20 preguntas)
+
+{
+  difficulty: "experto",
+  text: "¿Qué país tiene la mayor reserva de agua dulce del mundo?",
+  options: ["Canadá", "Brasil", "Rusia", "Estados Unidos"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué corriente marina influye en el clima de Europa occidental?",
+  options: ["Corriente de Humboldt", "Corriente del Golfo", "Corriente de Canarias", "Corriente de Benguela"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Cuál es el punto más profundo conocido de los océanos?",
+  options: ["Fosa de Java", "Fosa de Tonga", "Fosa de las Marianas", "Fosa de Perú-Chile"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país tiene la mayor cantidad de volcanes activos?",
+  options: ["Japón", "Indonesia", "Chile", "Islandia"],
+  answer: 1
 },
 
 {
@@ -2376,456 +2474,502 @@ body {
 
 {
   difficulty: "experto",
-  text: "¿Qué país africano tiene más población?",
-  options: ["Egipto", "Nigeria", "Etiopía", "Sudáfrica"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué cordillera separa tradicionalmente Europa de Asia?",
-  options: ["Andes", "Alpes", "Urales", "Cáucaso"],
+  text: "¿Qué ciudad se encuentra a mayor altitud entre las capitales del mundo?",
+  options: ["Quito", "Bogotá", "La Paz", "Katmandú"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué país tiene la ciudad de Estambul en dos continentes?",
-  options: ["Grecia", "Turquía", "Rusia", "Egipto"],
+  text: "¿Qué mar separa Europa de África?",
+  options: ["Mar Negro", "Mar Rojo", "Mar Mediterráneo", "Mar del Norte"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué desierto ocupa gran parte de Mongolia y China?",
+  options: ["Atacama", "Sahara", "Gobi", "Namib"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país tiene más islas en el mundo?",
+  options: ["Indonesia", "Filipinas", "Suecia", "Japón"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué río europeo pasa por Viena, Bratislava y Budapest?",
+  options: ["Rin", "Volga", "Danubio", "Elba"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país asiático fue antes conocido como Siam?",
+  options: ["Myanmar", "Camboya", "Tailandia", "Laos"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué línea imaginaria pasa por Greenwich, Inglaterra?",
+  options: ["Ecuador", "Trópico de Capricornio", "Meridiano cero", "Círculo Polar Ártico"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país tiene la mayor costa marítima del mundo?",
+  options: ["Australia", "Rusia", "Canadá", "Estados Unidos"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué montaña separa Europa de Asia tradicionalmente?",
+  options: ["Alpes", "Urales", "Cárpatos", "Cáucaso"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Cuál es la capital de Mongolia?",
-  options: ["Taskent", "Ulán Bator", "Astaná", "Biskek"],
+  text: "¿Qué país tiene la ciudad de Petra?",
+  options: ["Egipto", "Jordania", "Israel", "Arabia Saudita"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué océano rodea completamente al polo sur?",
-  options: ["Atlántico", "Pacífico", "Índico", "Océano Antártico"],
+  text: "¿Qué país alberga la mayor parte de la Amazonía?",
+  options: ["Perú", "Colombia", "Brasil", "Bolivia"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué mar interior limita con Europa y Asia?",
+  options: ["Mar Rojo", "Mar Caspio", "Mar Caribe", "Mar Báltico"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué ciudad africana es considerada la más poblada hasta 2026?",
+  options: ["El Cairo", "Johannesburgo", "Lagos", "Nairobi"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué país tiene el mayor número de vecinos fronterizos en Sudamérica?",
+  options: ["Argentina", "Perú", "Brasil", "Colombia"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué océano rodea completamente a la Antártida?",
+  options: ["Atlántico", "Pacífico", "Índico", "Océano Austral"],
   answer: 3
 },
-
-{
-  difficulty: "experto",
-  text: "¿Qué país tiene la mayor reserva de agua dulce superficial del mundo?",
-  options: ["Brasil", "Canadá", "Rusia", "Estados Unidos"],
-  answer: 0
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué río pasa por París?",
-  options: ["Danubio", "Sena", "Támesis", "Rin"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué país asiático fue anteriormente conocido como Siam?",
-  options: ["Camboya", "Vietnam", "Tailandia", "Laos"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué país tiene el monte Everest dentro de su frontera?",
-  options: ["India", "China", "Nepal", "Pakistán"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Cuál es la capital de Islandia?",
-  options: ["Oslo", "Helsinki", "Reikiavik", "Copenhague"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué país tiene más husos horarios oficiales?",
-  options: ["Estados Unidos", "Francia", "Rusia", "China"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Cuál es la capital más alta del mundo?",
-  options: ["Quito", "La Paz", "Bogotá", "Katmandú"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué archipiélago pertenece a Ecuador y es famoso por su biodiversidad?",
-  options: ["Azores", "Maldivas", "Galápagos", "Canarias"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué desierto es considerado el más árido del mundo?",
-  options: ["Sahara", "Gobi", "Atacama", "Namib"],
-  answer: 2
-}
 
 ],
       entretenimiento: [
 
+// NIVEL MEDIO (20 preguntas)
+
 {
   difficulty: "medio",
-  text: "¿Qué película ganó el Óscar a Mejor Película en 1998 y estuvo basada en el hundimiento de un famoso transatlántico?",
-  options: ["Avatar", "Titanic", "Gladiador", "El Aviador"],
-  answer: 1
-},
-{
-  difficulty: "medio",
-  text: "¿Qué personaje interpreta Robert Downey Jr. en Marvel?",
-  options: ["Thor", "Iron Man", "Hulk", "Doctor Strange"],
+  text: "¿Qué personaje vive en una piña debajo del mar?",
+  options: ["Mickey Mouse", "Bob Esponja", "Shrek", "Scooby-Doo"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué saga de películas incluye a Harry Potter?",
-  options: ["Star Wars", "El Señor de los Anillos", "Harry Potter", "Crepúsculo"],
+  text: "¿Qué saga de películas tiene personajes llamados Harry, Hermione y Ron?",
+  options: ["Star Wars", "El Señor de los Anillos", "Harry Potter", "Los Juegos del Hambre"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué cantante es conocida como la 'Reina del Pop'?",
-  options: ["Madonna", "Shakira", "Beyoncé", "Lady Gaga"],
-  answer: 0
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué videojuego tiene personajes como Mario y Luigi?",
-  options: ["Minecraft", "Pokémon", "Super Mario Bros.", "Zelda"],
+  text: "¿Qué superhéroe usa un escudo con una estrella?",
+  options: ["Iron Man", "Thor", "Capitán América", "Batman"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué serie incluye las familias Stark y Lannister?",
-  options: ["Vikings", "The Witcher", "Game of Thrones", "Breaking Bad"],
+  text: "¿Qué empresa creó a Mickey Mouse?",
+  options: ["Pixar", "DreamWorks", "Disney", "Warner Bros"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué película trata sobre el hundimiento de un famoso barco en 1912?",
-  options: ["Avatar", "Titanic", "Gladiador", "Pearl Harbor"],
+  text: "¿Qué videojuego tiene personajes llamados Mario y Luigi?",
+  options: ["Sonic", "Minecraft", "The Legend of Zelda", "Super Mario"],
+  answer: 3
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué cantante es conocida como la “Reina del Pop”?",
+  options: ["Shakira", "Madonna", "Beyoncé", "Taylor Swift"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué banda británica lanzó el álbum 'Abbey Road'?",
-  options: ["Queen", "The Beatles", "Coldplay", "Oasis"],
+  text: "¿Qué película animada tiene un muñeco vaquero llamado Woody?",
+  options: ["Cars", "Toy Story", "Frozen", "Coco"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué plataforma produjo originalmente 'Stranger Things'?",
+  text: "¿Qué plataforma es famosa por series como Stranger Things?",
   options: ["Disney+", "HBO", "Netflix", "Prime Video"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué cantante colombiana lanzó 'Hips Don't Lie'?",
-  options: ["Karol G", "Rosalía", "Paulina Rubio", "Shakira"],
-  answer: 3
+  text: "¿Qué superhéroe es conocido como el Hombre Araña?",
+  options: ["Batman", "Superman", "Spider-Man", "Flash"],
+  answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué película animada fue la primera creada por Pixar?",
-  options: ["Cars", "Toy Story", "Monsters Inc.", "Buscando a Nemo"],
+  text: "¿Qué princesa de Disney tiene una larga cabellera dorada?",
+  options: ["Ariel", "Bella", "Rapunzel", "Elsa"],
+  answer: 2
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué banda británica cantó “Hey Jude”?",
+  options: ["Queen", "The Beatles", "Coldplay", "Oasis"],
   answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué videojuego consiste en construir con bloques?",
+  options: ["Fortnite", "Roblox", "Minecraft", "Terraria"],
+  answer: 2
 },
 
 {
   difficulty: "medio",
   text: "¿Qué actor interpretó a Jack en Titanic?",
-  options: ["Brad Pitt", "Tom Cruise", "Leonardo DiCaprio", "Johnny Depp"],
+  options: ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"],
+  answer: 1
+},
+
+{
+  difficulty: "medio",
+  text: "¿Qué película tiene la frase “Hakuna Matata”?",
+  options: ["Shrek", "Tarzán", "El Rey León", "Frozen"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué artista lanzó el álbum 'Thriller'?",
-  options: ["Prince", "Michael Jackson", "David Bowie", "Elvis Presley"],
+  text: "¿Qué instrumento toca principalmente un pianista?",
+  options: ["Violín", "Piano", "Batería", "Flauta"],
   answer: 1
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué consola fue creada por Sony?",
-  options: ["Xbox", "Nintendo Switch", "PlayStation", "GameCube"],
+  text: "¿Qué cantante colombiano interpreta “TQG” junto a Shakira?",
+  options: ["J Balvin", "Maluma", "Karol G", "Camilo"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué banda británica lanzó el álbum 'Abbey Road'?",
-  options: ["Queen", "The Beatles", "Pink Floyd", "Oasis"],
-  answer: 1
-},
-
-{
-  difficulty: "medio",
-  text: "¿Qué personaje interpreta Robert Downey Jr. en el Universo Cinematográfico de Marvel?",
-  options: ["Thor", "Doctor Strange", "Iron Man", "Capitán América"],
+  text: "¿Qué saga espacial incluye personajes como Darth Vader y Yoda?",
+  options: ["Star Trek", "Avatar", "Star Wars", "Dune"],
   answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Cuál es el nombre del mago protagonista de la saga creada por J.K. Rowling?",
-  options: ["Percy Jackson", "Harry Potter", "Newt Scamander", "Frodo Bolsón"],
-  answer: 1
+  text: "¿Qué personaje de DC es un multimillonario que vive en Gotham?",
+  options: ["Flash", "Aquaman", "Batman", "Superman"],
+  answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué serie tiene casas como Stark, Lannister y Targaryen?",
-  options: ["The Witcher", "Game of Thrones", "Vikings", "House of Cards"],
-  answer: 1
+  text: "¿Qué serie animada tiene una familia amarilla en Springfield?",
+  options: ["Padre de Familia", "South Park", "Los Simpson", "Futurama"],
+  answer: 2
 },
 
 {
   difficulty: "medio",
-  text: "¿Qué cantante es conocida como la 'Reina del Pop'?",
-  options: ["Lady Gaga", "Madonna", "Shakira", "Beyoncé"],
+  text: "¿Qué cantante es conocido como el “Rey del Pop”?",
+  options: ["Elvis Presley", "Michael Jackson", "Prince", "Bruno Mars"],
   answer: 1
 },
 
-{
-  difficulty: "medio",
-  text: "¿Qué videojuego popular incluye personajes como Mario, Luigi y Bowser?",
-  options: ["Zelda", "Pokémon", "Super Mario Bros.", "Minecraft"],
-  answer: 2
-},
 
-{
-  difficulty: "dificil",
-  text: "¿Qué director creó las películas 'Inception' e 'Interstellar'?",
-  options: ["Steven Spielberg", "Christopher Nolan", "James Cameron", "Ridley Scott"],
-  answer: 1
-},
-{
-  difficulty: "dificil",
-  text: "¿Qué director creó las películas 'Inception' e 'Interstellar'?",
-  options: ["Steven Spielberg", "Christopher Nolan", "James Cameron", "Ridley Scott"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué actor interpretó al Joker en 'The Dark Knight' (2008)?",
-  options: ["Joaquin Phoenix", "Heath Ledger", "Jared Leto", "Jack Nicholson"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué grupo lanzó la canción 'Bohemian Rhapsody'?",
-  options: ["ABBA", "Queen", "Nirvana", "The Rolling Stones"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué actor interpretó a Neo en 'The Matrix'?",
-  options: ["Keanu Reeves", "Brad Pitt", "Tom Cruise", "Matt Damon"],
-  answer: 0
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué serie animada tiene un bar llamado Moe's Tavern?",
-  options: ["Padre de Familia", "Futurama", "Los Simpson", "Rick y Morty"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué película de Quentin Tarantino revitalizó el cine independiente en 1994?",
-  options: ["Kill Bill", "Pulp Fiction", "Reservoir Dogs", "Jackie Brown"],
-  answer: 1
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué empresa desarrolló originalmente la consola PlayStation?",
-  options: ["Nintendo", "Sega", "Sony", "Atari"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué saga cinematográfica incluye el planeta Pandora?",
-  options: ["Star Trek", "Dune", "Avatar", "Guardianes de la Galaxia"],
-  answer: 2
-},
-
-{
-  difficulty: "dificil",
-  text: "¿Qué cantante es conocido como el 'Rey del Rock'?",
-  options: ["Freddie Mercury", "Elvis Presley", "Mick Jagger", "Prince"],
-  answer: 1
-},
+// NIVEL DIFICIL (20 preguntas)
 
 {
   difficulty: "dificil",
   text: "¿Qué película ganó el Óscar a Mejor Película en 2020?",
-  options: ["1917", "Joker", "Parasite", "Ford v Ferrari"],
+  options: ["1917", "Joker", "Parásitos", "Nomadland"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué actor interpreta a Deadpool?",
-  options: ["Ryan Reynolds", "Chris Evans", "Tom Holland", "Hugh Jackman"],
-  answer: 0
+  text: "¿Qué actor interpretó a Iron Man en el MCU?",
+  options: ["Chris Evans", "Chris Hemsworth", "Robert Downey Jr.", "Mark Ruffalo"],
+  answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué videojuego popular se desarrolla en bloques y permite construir mundos?",
-  options: ["Fortnite", "Minecraft", "Roblox", "Terraria"],
+  text: "¿Qué banda lanzó el álbum “The Dark Side of the Moon”?",
+  options: ["Queen", "Pink Floyd", "Led Zeppelin", "The Rolling Stones"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué serie sigue la vida de Walter White?",
-  options: ["Ozark", "Breaking Bad", "Narcos", "Better Call Saul"],
+  text: "¿Qué videojuego popularizó el modo battle royale de Epic Games?",
+  options: ["PUBG", "Call of Duty", "Fortnite", "Apex Legends"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué director creó las películas de Jurassic Park y E.T.?",
+  options: ["James Cameron", "Steven Spielberg", "Christopher Nolan", "Ridley Scott"],
   answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué cantante lanzó el álbum '1989'?",
-  options: ["Taylor Swift", "Adele", "Billie Eilish", "Dua Lipa"],
-  answer: 0
+  text: "¿Qué cantante lanzó el álbum “Thriller”?",
+  options: ["Prince", "Michael Jackson", "David Bowie", "Freddie Mercury"],
+  answer: 1
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué actor interpretó al Joker en 'The Dark Knight' (2008)?",
+  text: "¿Qué serie tiene personajes llamados Walter White y Jesse Pinkman?",
+  options: ["The Sopranos", "Breaking Bad", "The Wire", "Narcos"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué empresa desarrolló la consola PlayStation?",
+  options: ["Nintendo", "Sega", "Sony", "Microsoft"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué actor interpretó al Joker en “The Dark Knight”?",
   options: ["Joaquin Phoenix", "Jared Leto", "Heath Ledger", "Jack Nicholson"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué grupo musical lanzó la canción 'Bohemian Rhapsody'?",
-  options: ["Queen", "ABBA", "The Rolling Stones", "Nirvana"],
+  text: "¿Qué cantante británica interpreta “Rolling in the Deep”?",
+  options: ["Dua Lipa", "Adele", "Amy Winehouse", "Jessie J"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué película de animación ganó el Óscar en 2022?",
+  options: ["Encanto", "Luca", "Turning Red", "Soul"],
   answer: 0
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué plataforma produjo originalmente la serie 'Stranger Things'?",
-  options: ["HBO", "Disney+", "Netflix", "Prime Video"],
+  text: "¿Qué saga de videojuegos protagoniza Link?",
+  options: ["Final Fantasy", "The Legend of Zelda", "God of War", "Halo"],
+  answer: 1
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué actor interpretó a Wolverine en X-Men?",
+  options: ["Ryan Reynolds", "Chris Pratt", "Hugh Jackman", "Ben Affleck"],
   answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Cuál fue la primera película animada producida por Pixar?",
-  options: ["Toy Story", "Cars", "Bichos", "Monsters Inc."],
-  answer: 0
+  text: "¿Qué grupo surcoreano popularizó canciones como “Dynamite”?",
+  options: ["BLACKPINK", "EXO", "BTS", "TWICE"],
+  answer: 2
 },
 
 {
   difficulty: "dificil",
-  text: "¿Qué artista lanzó el álbum 'Thriller'?",
-  options: ["Prince", "Michael Jackson", "Elvis Presley", "David Bowie"],
+  text: "¿Qué película dirigió Christopher Nolan sobre sueños y realidades?",
+  options: ["Tenet", "Memento", "Inception", "Interstellar"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué consola lanzó Nintendo en 2017?",
+  options: ["GameCube", "Wii U", "Nintendo Switch", "Nintendo DS"],
+  answer: 2
+},
+
+{
+  difficulty: "dificil",
+  text: "¿Qué cantante es conocido por el álbum “After Hours”?",
+  options: ["Drake", "The Weeknd", "Bad Bunny", "Post Malone"],
   answer: 1
 },
 
 {
-  difficulty: "experto",
-  text: "¿Qué compositor creó la banda sonora original de 'Star Wars'?",
-  options: ["Hans Zimmer", "John Williams", "Howard Shore", "Ennio Morricone"],
-  answer: 1
+  difficulty: "dificil",
+  text: "¿Qué serie de HBO está basada en una guerra entre familias nobles?",
+  options: ["The Boys", "Dark", "Game of Thrones", "The Crown"],
+  answer: 2
 },
+
 {
-  difficulty: "experto",
-  text: "¿Qué compositor creó la banda sonora original de 'Star Wars'?",
-  options: ["Hans Zimmer", "John Williams", "Howard Shore", "Ennio Morricone"],
+  difficulty: "dificil",
+  text: "¿Qué actor interpreta a Deadpool?",
+  options: ["Ryan Gosling", "Ryan Reynolds", "Chris Evans", "Tom Holland"],
   answer: 1
 },
+
+{
+  difficulty: "dificil",
+  text: "¿Qué cantante puertorriqueño lanzó el álbum “Un Verano Sin Ti”?",
+  options: ["Anuel AA", "Rauw Alejandro", "Bad Bunny", "Daddy Yankee"],
+  answer: 2
+},
+
+
+// NIVEL EXPERTO (20 preguntas)
 
 {
   difficulty: "experto",
   text: "¿Qué película ganó el primer Óscar a Mejor Película en 1929?",
-  options: ["Wings", "Casablanca", "Gone with the Wind", "Citizen Kane"],
+  options: ["Sunrise", "Wings", "Metropolis", "Citizen Kane"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué director italiano realizó “La Dolce Vita”?",
+  options: ["Vittorio De Sica", "Federico Fellini", "Sergio Leone", "Luchino Visconti"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué banda grabó el álbum “Sgt. Pepper's Lonely Hearts Club Band”?",
+  options: ["Pink Floyd", "Queen", "The Beatles", "The Doors"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué videojuego de Valve popularizó el género MOBA moderno?",
+  options: ["Half-Life", "Dota 2", "Portal", "Counter-Strike"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué actor ganó un Óscar por interpretar a Freddie Mercury?",
+  options: ["Rami Malek", "Taron Egerton", "Austin Butler", "Joaquin Phoenix"],
   answer: 0
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué actor interpretó a Vito Corleone en 'El Padrino' (1972)?",
-  options: ["Al Pacino", "Robert De Niro", "Marlon Brando", "Joe Pesci"],
+  text: "¿Qué película de Bong Joon-ho ganó el Óscar a Mejor Película?",
+  options: ["Memories of Murder", "Snowpiercer", "Parásitos", "The Host"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué banda lanzó el álbum 'The Dark Side of the Moon'?",
-  options: ["Led Zeppelin", "Pink Floyd", "Queen", "The Beatles"],
+  text: "¿Qué cantante lanzó el álbum “Lemonade”?",
+  options: ["Rihanna", "Beyoncé", "Alicia Keys", "SZA"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué director dirigió 'Psycho' y es considerado maestro del suspenso?",
-  options: ["Stanley Kubrick", "Martin Scorsese", "Alfred Hitchcock", "Francis Ford Coppola"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué videojuego de Rockstar Games tiene como ciudad principal Los Santos?",
-  options: ["Red Dead Redemption", "Bully", "GTA V", "Max Payne"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué actriz interpretó a Hermione Granger en Harry Potter?",
-  options: ["Emma Stone", "Emma Watson", "Jennifer Lawrence", "Natalie Portman"],
+  text: "¿Qué estudio desarrolló “The Last of Us”?",
+  options: ["Rockstar Games", "Naughty Dog", "Ubisoft", "Bethesda"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué cantante lanzó el álbum 'Back to Black'?",
-  options: ["Amy Winehouse", "Adele", "Rihanna", "Lady Gaga"],
+  text: "¿Qué director creó la trilogía de “El Señor de los Anillos”?",
+  options: ["James Cameron", "Peter Jackson", "Ridley Scott", "Guillermo del Toro"],
+  answer: 1
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué banda lideraba Freddie Mercury?",
+  options: ["Queen", "ABBA", "U2", "The Who"],
   answer: 0
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué serie de televisión tiene personajes llamados Michael Scott y Dwight Schrute?",
-  options: ["Brooklyn Nine-Nine", "The Office", "Friends", "How I Met Your Mother"],
+  text: "¿Qué serie popularizó la frase “Winter is coming”?",
+  options: ["Vikings", "The Witcher", "Game of Thrones", "House of the Dragon"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué actor interpretó a Neo en Matrix?",
+  options: ["Tom Cruise", "Brad Pitt", "Keanu Reeves", "Johnny Depp"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué película de Quentin Tarantino ganó la Palma de Oro en 1994?",
+  options: ["Kill Bill", "Reservoir Dogs", "Pulp Fiction", "Django Unchained"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué compositor creó la música de Star Wars?",
+  options: ["Hans Zimmer", "John Williams", "Ennio Morricone", "Howard Shore"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué actor interpreta a Jack Sparrow en 'Piratas del Caribe'?",
-  options: ["Orlando Bloom", "Johnny Depp", "Tom Hardy", "Colin Farrell"],
+  text: "¿Qué cantante lanzó el álbum “1989”?",
+  options: ["Billie Eilish", "Taylor Swift", "Katy Perry", "Olivia Rodrigo"],
   answer: 1
 },
 
@@ -2838,59 +2982,31 @@ body {
 
 {
   difficulty: "experto",
-  text: "¿Qué película surcoreana ganó el Óscar a Mejor Película en 2020?",
-  options: ["Oldboy", "Train to Busan", "Parasite", "Burning"],
+  text: "¿Qué película de ciencia ficción dirigió Stanley Kubrick en 1968?",
+  options: ["Blade Runner", "Solaris", "2001: A Space Odyssey", "Alien"],
   answer: 2
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué cantante fue líder de la banda Queen?",
-  options: ["David Bowie", "Freddie Mercury", "Mick Jagger", "Elton John"],
+  text: "¿Qué actor interpretó a Vito Corleone en “El Padrino”?",
+  options: ["Al Pacino", "Robert De Niro", "Marlon Brando", "Joe Pesci"],
+  answer: 2
+},
+
+{
+  difficulty: "experto",
+  text: "¿Qué grupo británico lanzó “Bohemian Rhapsody”?",
+  options: ["The Beatles", "Queen", "Oasis", "Coldplay"],
   answer: 1
 },
 
 {
   difficulty: "experto",
-  text: "¿Qué actor interpretó a Neo en 'The Matrix'?",
-  options: ["Brad Pitt", "Keanu Reeves", "Tom Cruise", "Johnny Depp"],
-  answer: 1
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué serie animada tiene un bar llamado Moe's Tavern?",
-  options: ["Padre de Familia", "Futurama", "Los Simpson", "Rick y Morty"],
+  text: "¿Qué videojuego de Rockstar tiene como protagonista a Arthur Morgan?",
+  options: ["GTA V", "Max Payne", "Red Dead Redemption 2", "Bully"],
   answer: 2
 },
-
-{
-  difficulty: "experto",
-  text: "¿Qué cantante colombiana lanzó la canción 'Hips Don't Lie'?",
-  options: ["Karol G", "Paulina Rubio", "Shakira", "Rosalía"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué película de 1994 dirigida por Quentin Tarantino revitalizó el cine independiente estadounidense?",
-  options: ["Reservoir Dogs", "Kill Bill", "Pulp Fiction", "Jackie Brown"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué empresa desarrolló originalmente la consola PlayStation?",
-  options: ["Nintendo", "Sega", "Sony", "Atari"],
-  answer: 2
-},
-
-{
-  difficulty: "experto",
-  text: "¿Qué saga cinematográfica incluye el planeta Pandora?",
-  options: ["Star Trek", "Dune", "Avatar", "Guardianes de la Galaxia"],
-  answer: 2
-}
 
 ]
     };
